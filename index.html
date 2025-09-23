@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sen ve Ben</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(-45deg, #f8bbd0, #e91e63, #bbdefb, #90caf9);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .bg-overlay {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(255,255,255,0.2)"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') repeat;
+            background-size: 30px;
+            opacity: 0.1;
+        }
+        .main-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px; text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            max-width: 90%; width: 600px;
+            animation: fadeIn 1s ease-out;
+            transition: transform 0.1s ease;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5em; color: #e91e63;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+        }
+        .subtitle { font-size: 1em; color: #555; margin-bottom: 20px; font-weight: 300; }
+        #counter { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin: 20px 0; }
+        .box {
+            background: rgba(233, 30, 99, 0.1);
+            padding: 15px; border-radius: 10px;
+            min-width: 80px; color: #e91e63;
+            transition: transform 0.3s ease;
+        }
+        .box:hover { transform: scale(1.05); }
+        .box .number { font-size: 2.3em; font-weight: 700; }
+        .box .label { font-size: 0.8em; text-transform: uppercase; font-weight: 400; }
+        .number.flip { animation: flipDown 0.5s ease-out; }
+        @keyframes flipDown {
+            0% { transform: translateY(-100%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        .button-container { display: flex; justify-content: center; gap: 15px; margin-top: 25px; }
+        .button {
+            text-decoration: none; color: white;
+            background: #e91e63;
+            padding: 10px 20px; border-radius: 12px;
+            font-size: 0.95em; font-weight: 500;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);
+            transition: all 0.3s ease;
+        }
+        .button:hover {
+            background: #f06292;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(233, 30, 99, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-overlay"></div>
+    <div class="main-card">
+        <h1>Sen ve Ben</h1>
+        <p class="subtitle">Sonsuzluğa akacak bir sayaç...</p>
+        <div id="counter">
+            <div class="box"><span id="days" class="number">0</span><span class="label">Gün</span></div>
+            <div class="box"><span id="hours" class="number">0</span><span class="label">Saat</span></div>
+            <div class="box"><span id="minutes" class="number">0</span><span class="label">Dakika</span></div>
+            <div class="box"><span id="seconds" class="number">0</span><span class="label">Saniye</span></div>
+        </div>
+        <div class="button-container">
+            <a href="reasons.html" class="button">Seni Sevmemin Nedenleri</a>
+        </div>
+    </div>
+    <script>
+        const baslangicTarihi = new Date(2025, 4, 30, 6, 16, 0);
+        const counterSpans = {
+            days: document.getElementById('days'),
+            hours: document.getElementById('hours'),
+            minutes: document.getElementById('minutes'),
+            seconds: document.getElementById('seconds')
+        };
+        function updateCounter() {
+            const simdi = new Date();
+            const fark = simdi - baslangicTarihi;
+            if (fark < 0) return;
+            const days = Math.floor(fark / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((fark % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((fark % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((fark % (1000 * 60)) / 1000);
+            updateSpan(counterSpans.days, days);
+            updateSpan(counterSpans.hours, hours);
+            updateSpan(counterSpans.minutes, minutes);
+            updateSpan(counterSpans.seconds, seconds);
+        }
+        function updateSpan(span, value) {
+            if (span.innerText !== String(value)) {
+                span.classList.add('flip');
+                span.innerText = value;
+                span.addEventListener('animationend', () => {
+                    span.classList.remove('flip');
+                }, { once: true });
+            }
+        }
+        const card = document.querySelector('.main-card');
+        card.addEventListener('mousemove', (e) => {
+            const { left, top, width, height } = card.getBoundingClientRect();
+            const x = e.clientX - left - width / 2;
+            const y = e.clientY - top - height / 2;
+            const rotateX = (y / height) * -30;
+            const rotateY = (x / width) * 30;
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'rotateX(0) rotateY(0)';
+        });
+        updateCounter();
+        setInterval(updateCounter, 1000);
+    </script>
+</body>
+</html>
