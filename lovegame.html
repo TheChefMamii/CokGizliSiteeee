@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seni Çok Seviyorum ❤️</title>
+    <style>
+        body { margin: 0; padding: 0; font-family: 'Arial', sans-serif; background-color: #FFFFFF; display: flex; justify-content: center; overflow-x: hidden; position: relative; min-height: 100vh; }
+        .page-wrapper { position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; transition: opacity 0.5s; }
+        .counter { position: fixed; top: 20px; right: 20px; font-size: 2em; font-weight: bold; color: #FF0000; z-index: 101; background-color: rgba(255, 255, 255, 0.7); padding: 5px 10px; border-radius: 5px; }
+        .main-text { font-size: 3em; font-weight: bold; color: #FF0000; margin-top: 100px; text-align: center; white-space: nowrap; transition: color 0.5s; }
+        .cok-container { display: flex; flex-direction: column; align-items: flex-start;  width: 100%; margin-top: 10px; }
+        .cok-item { font-size: 2.5em; font-weight: bold; color: #FF0000; margin-bottom: 10px; opacity: 0; transition: opacity 0.5s ease-in-out; white-space: nowrap; }
+        .cok-item.visible { opacity: 1; }
+        .message-panel { position: fixed; top: 80px; right: 20px; width: 280px; height: 60vh; background-color: #fdf6f8; border: 2px solid #ffc2d1; border-radius: 10px; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; padding: 10px; box-sizing: border-box; transition: opacity 0.5s; }
+        .panel-header { font-size: 1.2em; font-weight: bold; text-align: center; padding-bottom: 10px; border-bottom: 1px solid #ffc2d1; color: #e15c82; }
+        .message-log { flex-grow: 1; overflow-y: auto; padding-top: 10px; }
+        .log-entry { background-color: #fff; margin-bottom: 8px; padding: 10px; border-radius: 5px; border-left: 5px solid #ff8fab; font-size: 0.9em; opacity: 0; animation: fadeIn 0.5s forwards; }
+        @keyframes fadeIn { to { opacity: 1; } }
+        .blackout-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: black; z-index: 9998; opacity: 0; pointer-events: none; transition: opacity 2s ease-in-out; }
+        .blackout-overlay.active { opacity: 1; pointer-events: auto; }
+        .scroll-prompt { position: fixed; left: 20px; top: 50%; transform: translateY(-50%); writing-mode: vertical-rl; font-size: 1.2em; font-weight: bold; color: #FF0000; opacity: 0.7; z-index: 100; letter-spacing: 5px; pointer-events: none; animation: pulse 2s infinite; transition: opacity 0.5s; }
+        @keyframes pulse { 0% { transform: translateY(-50%) scale(1); } 50% { transform: translateY(-50%) scale(1.1); } 100% { transform: translateY(-50%) scale(1); } }
+        
+        .market-button { position: fixed; top: 20px; left: 20px; padding: 10px 15px; font-size: 1.2em; font-weight: bold; background-color: #FFD700; color: #333; border: 2px solid #DAA520; border-radius: 8px; cursor: pointer; z-index: 101; transition: opacity 0.5s; }
+        .market-panel { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 380px; max-height: 80vh; overflow-y: auto; background-color: white; border: 3px solid #FFD700; border-radius: 10px; padding: 20px; z-index: 102; box-shadow: 0 0 20px rgba(0,0,0,0.5); text-align: center; }
+        .market-panel.hidden { display: none; }
+        .market-item { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+        .market-item:last-child { border-bottom: none; }
+        .market-item p { margin: 5px 0 10px 0; font-size: 0.9em; color: #555;}
+        .buy-button { padding: 8px 16px; border-radius: 5px; border: none; background-color: #4CAF50; color: white; cursor: pointer; }
+        .buy-button:disabled { background-color: #ccc; }
+        .close-button { margin-top: 20px; padding: 10px 20px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer;}
+        
+        .final-sequence { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; pointer-events: none; }
+        .final-sequence.hidden { display: none; }
+        
+        #finalCounter { font-size: 6em; font-weight: bold; color: #ffffff; text-shadow: 0 0 20px #ff00de, 0 0 30px #ff00de, 0 0 10px #ffffff; transition: opacity 1s ease-in-out; }
+        .final-poem { color: white; font-size: 1.5em; text-align: center; white-space: pre-wrap; opacity: 0; transition: opacity 2s ease-in-out; line-height: 1.6; }
+        .return-button { padding: 15px 30px; font-size: 1.2em; cursor: pointer; background-color: #fff; color: #000; border: none; border-radius: 50px; opacity: 0; transition: opacity 2s ease-in-out; margin-top: 40px; pointer-events: auto; }
+        .final-poem.visible, .return-button.visible { opacity: 1; }
+
+        .cinematic-sequence { position: absolute; width: 80%; max-width: 800px; text-align: center; }
+        .cinematic-text { color: white; font-size: 1.8em; opacity: 0; transition: opacity 1.5s ease-in-out; line-height: 1.5; font-weight: bold; text-shadow: 0 0 10px rgba(255, 255, 255, 0.7); }
+        .cinematic-text.visible { opacity: 1; }
+
+        @keyframes flyAcross { from { transform: translateX(-20vw); opacity: 0.7; } to { transform: translateX(120vw); opacity: 0; } }
+        .flying-cok { position: fixed; z-index: 9998; color: #ff00de; font-size: 2.5em; font-weight: bold; text-shadow: 0 0 10px white; pointer-events: none; opacity: 0; animation-name: flyAcross; animation-timing-function: linear; }
+    </style>
+</head>
+<body>
+    <div id="blackout-overlay" class="blackout-overlay"></div>
+    
+    <div id="finalSequence" class="final-sequence hidden">
+        <div id="cinematicSequence" class="cinematic-sequence"></div>
+        <div id="finalCounter">0</div>
+        <div id="finalPoem" class="final-poem"></div>
+        <button id="returnButton" class="return-button">Başa Dön</button>
+    </div>
+
+    <div class="page-wrapper" id="pageWrapper">
+        <div class="counter" id="cokCounter"></div>
+        <div id="messagePanel" class="message-panel">
+            <div class="panel-header">💌 Özel Mesajlar 💌</div>
+            <div id="messageLog" class="message-log"></div>
+        </div>
+        <div class="main-text" id="mainText"> Seni <span class="cok-word">ÇOK</span> seviyorum ❤️ </div>
+        <div class="cok-container" id="cokContainer"></div>
+        <div class="scroll-prompt">KAYDIR</div>
+        <button id="marketButton" class="market-button">🛒 Market</button>
+
+        <div id="marketPanel" class="market-panel hidden">
+            <h2>Market</h2>
+            <p>Harcanabilir Bakiye: <span id="marketCokCount">0</span></p>
+            <div class="market-item">
+                <strong>Senin İçin Hediye ❤️</strong><p>Beklenmedik bir anda gelen en güzel hediye! Anında 10.000 ÇOK kazandırır.</p>
+                <button id="claimFreeBonus" class="buy-button" data-cost="0">Ücretsiz Al</button>
+            </div>
+            <hr><h4>Aşk Çarpanları</h4>
+             <div class="market-item">
+                <strong>Aşk Çarpanı x10</strong> <p>Her kaydırmada 'ÇOK' üretimini ona katlar!</p>
+                <button id="buyMultiplier10" class="buy-button" data-cost="5000">5000 ÇOK</button>
+            </div>
+            <hr><h4>özelleştirmeler</h4>
+            <div class="market-item">
+                <strong>Rengarenkk </strong> <p>renk değiştiri</p>
+                <button id="buyRainbowText" class="buy-button" data-cost="3500">1000 ÇOK</button>
+            </div>
+            <div class="market-item">
+                <strong>Kalplerr senin için</strong> <p>Kaydırdıkça ekrana kalpler gelir</p>
+                <button id="buyFlyingHearts" class="buy-button" data-cost="7500">4000 ÇOK</button>
+            </div>
+            <button id="closeMarketButton" class="close-button">Kapat</button>
+        </div>
+    </div>
+    
+    <script>
+
+        const pageWrapper = document.getElementById('pageWrapper');
+        const cokContainer = document.getElementById('cokContainer');
+        const cokCounter = document.getElementById('cokCounter');
+        const mainCok = document.querySelector('.main-text .cok-word');
+        const mainText = document.getElementById('mainText');
+        
+        let cokCount = 0; let totalCoksGenerated = 0;
+        const initialCoks = 10; const loadMoreOffset = 200;
+        let cokAlignmentOffset = 0; let coksPerScroll = 10;
+        let rainbowInterval = null;
+
+        const marketButton = document.getElementById('marketButton');
+        const marketPanel = document.getElementById('marketPanel');
+        const closeMarketButton = document.getElementById('closeMarketButton');
+        const marketCokCountSpan = document.getElementById('marketCokCount');
+        const messageLog = document.getElementById('messageLog');
+        
+        const finalSequenceContainer = document.getElementById('finalSequence');
+        const finalCounter = document.getElementById('finalCounter');
+        const finalPoem = document.getElementById('finalPoem');
+        const returnButton = document.getElementById('returnButton');
+        const blackoutOverlay = document.getElementById('blackout-overlay');
+        const scrollPrompt = document.querySelector('.scroll-prompt');
+        const cinematicContainer = document.getElementById('cinematicSequence');
+
+        const upgradeButtons = {
+            claimFreeBonus: document.getElementById('claimFreeBonus'),
+            buyMultiplier10: document.getElementById('buyMultiplier10'),
+            buyRainbowText: document.getElementById('buyRainbowText'),
+            buyFlyingHearts: document.getElementById('buyFlyingHearts')
+        };
+        
+
+        let upgrades = {
+            freeBonus: false, 
+            multiplier10: false, 
+            rainbowText: false, 
+            flyingHearts: false
+        };
+        
+        const specialMessages = {
+            200: "200! Burası daha başlangıçç (marketten bişiler alabilirsinn)",
+            400: "400... Oha hala devam ediyormusunn.",
+            600: "600 kere 'çok' desem, yine az :(",
+            800: "800. ÇOKKKKKKKKK",
+            1000: "1000 Sanaa olan sevgimin yarısının yarısının yarısının yarısının yarısının yarısının ..... çok yarısının milyonda birii",
+            1200: "Markete uğramayı unutmaa",
+            1400: "seniçokçokçokseviyorumm",
+            1600: "biraz fazla devam edicek gibi",
+            1800: "bu şey aslında sonsuza denk kayıyor",
+            2000: "Parmağın yorulcakkk",
+            2500: "hala devammı ediyosunnnn",
+            2700: "Tamamm 3000 de birakabilirsin parmağın yorulmasın",
+        };
+
+        function alignCoks() { if (mainCok) { const mainCokRect = mainCok.getBoundingClientRect(); cokAlignmentOffset = mainCokRect.left; document.querySelectorAll('.cok-item').forEach(cok => { cok.style.marginLeft = `${cokAlignmentOffset}px`; }); } }
+        function addVisualCoks(count) { for (let i = 0; i < count; i++) { const cokDiv = document.createElement('div'); cokDiv.classList.add('cok-item'); cokDiv.textContent = 'ÇOK'; cokDiv.style.marginLeft = `${cokAlignmentOffset}px`; cokContainer.appendChild(cokDiv); setTimeout(() => cokDiv.classList.add('visible'), 50 * i); } }
+        function addCok(count) { cokCount += count; totalCoksGenerated += count; addVisualCoks(Math.min(count, 50)); updateCounters(); }
+        function addSpecialMessage(milestone, message) { const logEntry = document.createElement('div'); logEntry.classList.add('log-entry'); logEntry.innerHTML = `<strong>${milestone.toLocaleString('tr-TR')} ÇOK:</strong> ${message}`; logEntry.dataset.count = milestone; messageLog.appendChild(logEntry); messageLog.scrollTop = messageLog.scrollHeight; }
+        function updateCounters() { cokCounter.textContent = Math.floor(totalCoksGenerated).toLocaleString('tr-TR'); marketCokCountSpan.textContent = Math.floor(cokCount).toLocaleString('tr-TR'); updateMarketUI(); if (totalCoksGenerated >= 3000 && !finalSequenceContainer.classList.contains('active')) { startFinalSequence(); } const existingMessages = new Set(Array.from(document.querySelectorAll('.log-entry')).map(el => el.dataset.count)); const milestones = Object.keys(specialMessages).map(Number).sort((a, b) => a - b); for (const milestone of milestones) { if (totalCoksGenerated >= milestone && !existingMessages.has(String(milestone))) { addSpecialMessage(milestone, specialMessages[milestone]); } } }
+
+        function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+
+        async function playCinematic() {
+
+            const cinematicScenes = [
+                "Matematikçiler sayılar bulmuşlar çoklukları açıklamak için",
+                "Pi sayısının trilyonlarca basamağını hesaplamışlar",
+                "400 basamaklı sayılar isimlendirmişler",
+                "Ama keşfettikleri en büyük sayılar bile yeterli olmadı",
+                "Burda yazması gereken çok sayısını açıklayacak kadar",
+                "Bu sonsuzluk matematikle açıklancak bir şey değill"
+            ];
+
+            for (const sceneText of cinematicScenes) {
+                const p = document.createElement('p');
+                p.textContent = sceneText;
+                p.classList.add('cinematic-text');
+                cinematicContainer.innerHTML = '';
+                cinematicContainer.appendChild(p);
+                await sleep(100);
+                p.classList.add('visible');
+                await sleep(4000);
+                p.classList.remove('visible');
+                await sleep(1500);
+            }
+
+            finalPoem.textContent = `Seni matematiğin veya herhangi birşeyin açıklayamayacağı sonsuz çoklukla seviyorummmmmmmm`;
+            finalPoem.classList.add('visible');
+            returnButton.classList.add('visible');
+        }
+
+        function startFinalSequence() {
+            if (finalSequenceContainer.classList.contains('active')) return;
+            finalSequenceContainer.classList.add('active');
+
+            pageWrapper.style.opacity = '0'; marketButton.style.opacity = '0'; scrollPrompt.style.opacity = '0'; messagePanel.style.opacity = '0'; cokCounter.style.opacity = '0';
+            blackoutOverlay.classList.add('active');
+            finalSequenceContainer.classList.remove('hidden');
+
+            let currentCount = totalCoksGenerated;
+            finalCounter.textContent = Math.floor(currentCount).toLocaleString('tr-TR');
+            const targetCount = 1000000000;
+
+            const flyingCokInterval = setInterval(() => { const cok = document.createElement('div'); cok.textContent = 'ÇOK'; cok.classList.add('flying-cok'); cok.style.top = `${Math.random() * 100}vh`; cok.style.animationDuration = `${Math.random() * 2 + 1}s`; document.body.appendChild(cok); setTimeout(() => cok.remove(), 3000); }, 200);
+
+            const counterInterval = setInterval(() => {
+                let increment = currentCount * 0.1;
+                if (increment < 1000) increment = 1000;
+                currentCount += increment;
+
+                if (currentCount >= targetCount) {
+                    currentCount = targetCount;
+                    clearInterval(counterInterval);
+                    
+                    setTimeout(() => {
+                        clearInterval(flyingCokInterval);
+                        document.querySelectorAll('.flying-cok').forEach(el => el.remove());
+                    }, 2000);
+
+                    finalCounter.style.opacity = '0';
+                    playCinematic();
+                }
+                finalCounter.textContent = Math.floor(currentCount).toLocaleString('tr-TR');
+            }, 50);
+        }
+
+
+        function openMarket() { marketPanel.classList.remove('hidden'); updateMarketUI(); }
+        function closeMarket() { marketPanel.classList.add('hidden'); }
+        function updateMarketUI() { marketCokCountSpan.textContent = Math.floor(cokCount).toLocaleString('tr-TR'); for (const key in upgradeButtons) { if (upgradeButtons.hasOwnProperty(key)) { const button = upgradeButtons[key]; const upgradeKey = key.replace('buy', '').replace('claim', ''); const finalUpgradeKey = upgradeKey.charAt(0).toLowerCase() + upgradeKey.slice(1); updateButtonState(button, upgrades[finalUpgradeKey]); } } }
+        function updateButtonState(button, hasUpgrade) { const cost = parseInt(button.dataset.cost); if (hasUpgrade) { button.disabled = true; button.textContent = "Alındı"; } else if (cokCount < cost) { button.disabled = true; button.textContent = `Yetersiz Bakiye`; } else { button.disabled = false; if (cost === 0) { button.textContent = 'Ücretsiz Al'; } else { button.textContent = `${cost.toLocaleString('tr-TR')} ÇOK`; } } }
+        
+
+        function recalculateScrollProduction() { 
+            let base = 10; 
+            let multiplier = 1; 
+            if (upgrades.multiplier10) multiplier *= 10; 
+            coksPerScroll = base * multiplier; 
+        }
+
+        function buyUpgrade(button, upgradeKey) { const cost = parseInt(button.dataset.cost); if (cokCount >= cost && !upgrades[upgradeKey]) { cokCount -= cost; upgrades[upgradeKey] = true; recalculateScrollProduction(); updateCounters(); return true; } return false; }
+
+        function claimFreeBonus() { if(buyUpgrade(upgradeButtons.claimFreeBonus, 'freeBonus')) { cokCount += 10000; updateCounters(); closeMarket(); } }
+        function buyMultiplier10() { if(buyUpgrade(upgradeButtons.buyMultiplier10, 'multiplier10')) closeMarket(); }
+        function buyRainbowText() { if(buyUpgrade(upgradeButtons.buyRainbowText, 'rainbowText')) { if (rainbowInterval) clearInterval(rainbowInterval); rainbowInterval = setInterval(() => { const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0'); mainText.style.color = randomColor; }, 1000); closeMarket(); } }
+        function buyFlyingHearts() { if(buyUpgrade(upgradeButtons.buyFlyingHearts, 'flyingHearts')) closeMarket(); }
+
+        function createFlyingHeart() { const heart = document.createElement('div'); heart.innerHTML = '❤️'; heart.style.position = 'fixed'; heart.style.left = `${Math.random() * 100}vw`; heart.style.top = `${Math.random() * 100}vh`; heart.style.fontSize = `${Math.random() * 20 + 15}px`; heart.style.opacity = '0'; heart.style.transition = 'all 2s ease-out'; heart.style.zIndex = '10'; heart.style.pointerEvents = 'none'; document.body.appendChild(heart); setTimeout(() => { heart.style.opacity = '1'; heart.style.transform = 'translateY(-100px)'; }, 10); setTimeout(() => { heart.remove(); }, 2000); }
+
+
+        Object.keys(upgradeButtons).forEach(key => {
+            const functionName = key.charAt(0).toLowerCase() + key.slice(1);
+            if(window[functionName]) upgradeButtons[key].addEventListener('click', window[functionName]);
+        });
+        marketButton.addEventListener('click', openMarket);
+        closeMarketButton.addEventListener('click', closeMarket);
+        returnButton.addEventListener('click', () => { location.reload(); });
+        window.addEventListener('load', () => { alignCoks(); addCok(initialCoks); });
+        window.addEventListener('resize', alignCoks);
+        window.addEventListener('scroll', () => { if (totalCoksGenerated >= 3000) return; const { scrollTop, scrollHeight, clientHeight } = document.documentElement; if (scrollTop + clientHeight >= scrollHeight - loadMoreOffset) { addCok(coksPerScroll); } if (upgrades.flyingHearts && Math.random() > 0.8) { createFlyingHeart(); } });
+    </script>
+</body>
+</html>
