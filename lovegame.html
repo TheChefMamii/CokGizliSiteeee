@@ -26,7 +26,7 @@
         .blackout-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: black; z-index: 9998; opacity: 0; pointer-events: none; transition: opacity 2s ease-in-out; }
         .blackout-overlay.active { opacity: 1; pointer-events: auto; }
         .final-sequence { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; pointer-events: none; }
-        .final-sequence.active { pointer-events: auto; } /* Düzeltme: Sadece aktifken etkileşime izin ver */
+        .final-sequence.active { pointer-events: auto; }
         .final-sequence.hidden { display: none; }
         #finalCounter { font-size: 6em; font-weight: bold; color: #ffffff; text-shadow: 0 0 20px #ff00de, 0 0 30px #ff00de, 0 0 10px #ffffff; transition: opacity 1s ease-in-out; }
         .cinematic-sequence { position: absolute; width: 80%; max-width: 800px; text-align: center; }
@@ -49,7 +49,7 @@
         .buy-button:disabled { background-color: #ccc; }
         .close-button { margin-top: 20px; padding: 10px 20px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer;}
         
-        /* YENİ: Yukarı Dön Butonu */
+        /* Yukarı Dön Butonu */
         #scrollTopButton {
             display: none; position: fixed; bottom: 20px; right: 30px; z-index: 99;
             font-size: 24px; border: none; outline: none; background-color: #FF0000;
@@ -114,7 +114,8 @@
         const mainText = document.getElementById('mainText');
         
         let cokCount = 0; let totalCoksGenerated = 0;
-        const initialCoks = 10; const loadMoreOffset = 200;
+        const initialCoks = 40; // DÜZELTME: Başlangıç değerini artırdık
+        const loadMoreOffset = 200;
         let coksPerScroll = 10;
         let rainbowInterval = null;
 
@@ -130,7 +131,7 @@
         const returnButton = document.getElementById('returnButton');
         const blackoutOverlay = document.getElementById('blackout-overlay');
         const cinematicContainer = document.getElementById('cinematicSequence');
-        const scrollTopButton = document.getElementById('scrollTopButton'); // Yeni Buton
+        const scrollTopButton = document.getElementById('scrollTopButton');
         
         const upgradeButtons = {
             claimFreeBonus: document.getElementById('claimFreeBonus'),
@@ -215,7 +216,7 @@
                 await sleep(1500);
             }
 
-            finalPoem.textContent = `Seni matematiğin veya herhangi birşeyin açıklayamayacağı sonsuz çoklukla seviyorummmmmmmm`;
+            finalPoem.textContent = `İlk defa tutuştuğumuzda el ele,\nTüm dertler bir anda yok olu verdi.\nHayatımda hiç bu kadar birini sevceğimi düşünmemiştim,\nHayatım bir anda güzelleşiverdi...`;
             finalPoem.classList.add('visible');
             returnButton.classList.add('visible');
         }
@@ -226,7 +227,7 @@
             
             pageWrapper.style.opacity = '0';
             marketButton.style.opacity = '0';
-            scrollTopButton.style.display = 'none'; // Yukarı dön tuşunu da gizle
+            scrollTopButton.style.display = 'none';
             messagePanel.style.opacity = '0';
             cokCounter.style.opacity = '0';
             
@@ -265,9 +266,14 @@
         function updateButtonState(button, hasUpgrade) {
             const cost = parseInt(button.dataset.cost);
             button.disabled = hasUpgrade || cokCount < cost;
-            if (hasUpgrade) button.textContent = "Alındı";
-            else if (cokCount < cost) button.textContent = "Yetersiz Bakiye";
-            else button.textContent = cost === 0 ? 'Ücretsiz Al' : `${cost.toLocaleString('tr-TR')} ÇOK`;
+            if (hasUpgrade) {
+                button.textContent = "Alındı";
+            } else {
+                button.textContent = (cost === 0) ? 'Ücretsiz Al' : `${cost.toLocaleString('tr-TR')} ÇOK`;
+                 if (cokCount < cost) {
+                    button.textContent = `Yetersiz Bakiye`;
+                }
+            }
         }
         
         function recalculateScrollProduction() { 
@@ -275,7 +281,7 @@
         }
 
         function buyUpgrade(upgradeKey) {
-            const buttonId = "buy" + upgradeKey.charAt(0).toUpperCase() + upgradeKey.slice(1);
+            let buttonId = "buy" + upgradeKey.charAt(0).toUpperCase() + upgradeKey.slice(1);
             if (upgradeKey === 'freeBonus') buttonId = 'claimFreeBonus';
             const button = document.getElementById(buttonId);
             const cost = parseInt(button.dataset.cost);
@@ -300,7 +306,7 @@
         marketButton.addEventListener('click', openMarket);
         closeMarketButton.addEventListener('click', closeMarket);
         returnButton.addEventListener('click', () => location.reload());
-        scrollTopButton.addEventListener('click', () => window.scrollTo({ top: 0 }));
+        scrollTopButton.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
         Object.keys(upgradeButtons).forEach(key => {
             const functionName = key.charAt(0).toLowerCase() + key.slice(1);
@@ -309,13 +315,10 @@
         
         window.addEventListener('scroll', () => {
             if (finalSequenceContainer.classList.contains('active')) return;
-            
-            // Yukarı dön butonunu göster/gizle
             scrollTopButton.style.display = (document.documentElement.scrollTop > 300) ? 'block' : 'none';
 
-            // Yeni 'ÇOK' ekle
             const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-            if (scrollTop + clientHeight >= scrollHeight - loadMoreOffset) {
+            if (scrollTop + clientHeight >= scrollHeight - 50) { // Offset'i biraz küçülttüm
                 addCok(coksPerScroll);
             }
             if (upgrades.flyingHearts && Math.random() > 0.8) {
