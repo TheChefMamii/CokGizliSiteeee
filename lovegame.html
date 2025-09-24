@@ -112,6 +112,8 @@
         const cokContainer = document.getElementById('cokContainer');
         const cokCounter = document.getElementById('cokCounter');
         const mainText = document.getElementById('mainText');
+        const mainCokWord = document.querySelector('.main-text .cok-word');
+
         
         let cokCount = 0; let totalCoksGenerated = 0;
         const initialCoks = 40; // DÜZELTME: Başlangıç değerini artırdık
@@ -167,7 +169,7 @@
                 const cokDiv = document.createElement('div');
                 cokDiv.classList.add('cok-item');
                 cokDiv.textContent = 'ÇOK';
-                cokDiv.style.marginLeft = `${mainText.getBoundingClientRect().left}px`;
+                cokDiv.style.marginLeft = `${mainCokWord.getBoundingClientRect().left}px`;
                 cokContainer.appendChild(cokDiv);
                 setTimeout(() => cokDiv.classList.add('visible'), 50 * i);
             }
