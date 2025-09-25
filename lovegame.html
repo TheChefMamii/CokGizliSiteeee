@@ -18,12 +18,15 @@
         .cok-item { font-size: 2.5em; font-weight: bold; color: #FF0000; margin-bottom: 10px; opacity: 0; transition: opacity 0.5s ease-in-out; white-space: nowrap; }
         .cok-item.visible { opacity: 1; }
         
-        /* DÜZELTME: Mesaj paneli mobil uyumlu hale getirildi */
         .message-panel { position: fixed; top: 80px; right: 10px; width: 90%; max-width: 280px; height: 50vh; background-color: #fdf6f8; border: 2px solid #ffc2d1; border-radius: 10px; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; padding: 10px; box-sizing: border-box; transition: opacity 0.5s; }
         .panel-header { font-size: 1.2em; font-weight: bold; text-align: center; padding-bottom: 10px; border-bottom: 1px solid #ffc2d1; color: #e15c82; }
         .message-log { flex-grow: 1; overflow-y: auto; padding-top: 10px; }
         .log-entry { background-color: #fff; margin-bottom: 8px; padding: 10px; border-radius: 5px; border-left: 5px solid #ff8fab; font-size: 0.9em; opacity: 0; animation: fadeIn 0.5s forwards; }
         @keyframes fadeIn { to { opacity: 1; } }
+
+        /* YENİDEN EKLENDİ: Kaydır Yazısı Stili */
+        .scroll-prompt { position: fixed; left: 10px; top: 50%; transform: translateY(-50%); writing-mode: vertical-rl; font-size: 1.2em; font-weight: bold; color: #FF0000; opacity: 0.7; z-index: 100; letter-spacing: 5px; pointer-events: none; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: translateY(-50%) scale(1); } 50% { transform: translateY(-50%) scale(1.1); } 100% { transform: translateY(-50%) scale(1); } }
 
         /* Final Sahnesi ve Sinematik */
         .blackout-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: black; z-index: 9998; opacity: 0; pointer-events: none; transition: opacity 2s ease-in-out; }
@@ -41,7 +44,7 @@
         @keyframes flyAcross { from { transform: translateX(-20vw); opacity: 0.7; } to { transform: translateX(120vw); opacity: 0; } }
         .flying-cok { position: fixed; z-index: 9998; color: #ff00de; font-size: 2.5em; font-weight: bold; text-shadow: 0 0 10px white; pointer-events: none; opacity: 0; animation-name: flyAcross; animation-timing-function: linear; }
 
-        /* DÜZELTME: Market mobil uyumlu hale getirildi */
+        /* Market */
         .market-button { position: fixed; top: 10px; left: 10px; padding: 10px 15px; font-size: 1em; font-weight: bold; background-color: #FFD700; color: #333; border: 2px solid #DAA520; border-radius: 8px; cursor: pointer; z-index: 101; transition: opacity 0.5s; }
         .market-panel { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 380px; max-height: 80vh; overflow-y: auto; background-color: white; border: 3px solid #FFD700; border-radius: 10px; padding: 20px; z-index: 102; box-shadow: 0 0 20px rgba(0,0,0,0.5); text-align: center; box-sizing: border-box; }
         .market-panel.hidden { display: none; }
@@ -53,11 +56,11 @@
         #scrollTopButton { display: none; position: fixed; bottom: 20px; right: 20px; z-index: 99; font-size: 20px; border: none; outline: none; background-color: #FF0000; color: white; cursor: pointer; padding: 10px 15px; border-radius: 50%; opacity: 0.7; transition: opacity 0.3s; }
         #scrollTopButton:hover { opacity: 1; }
         
-        /* YENİ: MOBİL UYUMLULUK (Responsive Design) */
+        /* MOBİL UYUMLULUK (Responsive Design) */
         @media (max-width: 768px) {
             .main-text { font-size: 2.2em; white-space: normal; margin-top: 80px; }
             .cok-item { font-size: 1.8em; }
-            .message-panel { display: none; } /* Telefonda mesaj panelini gizle */
+            .message-panel { display: none; }
             #finalCounter { font-size: 3.5em; }
             .cinematic-text { font-size: 1.2em; }
             .final-poem { font-size: 1em; }
@@ -84,7 +87,7 @@
         </div>
         <div class="main-text" id="mainText">Seni <span class="cok-word">ÇOK</span> seviyorum ❤️</div>
         <div class="cok-container" id="cokContainer"></div>
-        <button id="marketButton" class="market-button">🛒 Market</button>
+        <div class="scroll-prompt">KAYDIR</div> <button id="marketButton" class="market-button">🛒 Market</button>
 
         <div id="marketPanel" class="market-panel hidden">
             <h2>Market</h2>
@@ -119,7 +122,7 @@
         const mainText = document.getElementById('mainText');
         
         let cokCount = 0; let totalCoksGenerated = 0;
-        const initialCoks = 50; // Mobil için başlangıç değeri artırıldı
+        const initialCoks = 50;
         const loadMoreOffset = 200;
         let coksPerScroll = 10;
         let rainbowInterval = null;
@@ -163,6 +166,7 @@
             2500: "hala devammı ediyosunnnn",
             2700: "Tamamm 3000 de birakabilirsin parmağın yorulmasın",
         };
+
         // --- TEMEL FONKSİYONLAR ---
         function addCok(count) {
             cokCount += count;
@@ -207,7 +211,6 @@
         
         // --- SİNEMATİK VE FİNAL SAHNESİ ---
         function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
-
         async function playCinematic() {
             const cinematicScenes = [
                 "Matematikçiler sayılar bulmuşlar çoklukları açıklamak için",
@@ -216,7 +219,6 @@
                 "Sana olan sevgimi tarif etmeye...",
                 "Bu sonsuzluk matematikle açıklanacak bir şey değil"
             ];
-
             for (const sceneText of cinematicScenes) {
                 const p = document.createElement('p');
                 p.textContent = sceneText;
@@ -229,7 +231,6 @@
                 p.classList.remove('visible');
                 await sleep(1500);
             }
-
             finalPoem.textContent = `Seni matematiğin veya herhangi birşeyin açıklayamayacağı sonsuz çoklukla seviyorummmmmmmm`;
             finalPoem.classList.add('visible');
             returnButton.classList.add('visible');
@@ -242,6 +243,7 @@
             pageWrapper.style.opacity = '0';
             marketButton.style.opacity = '0';
             scrollTopButton.style.display = 'none';
+            document.querySelector('.scroll-prompt').style.opacity = '0';
             messagePanel.style.opacity = '0';
             cokCounter.style.opacity = '0';
             
@@ -271,10 +273,10 @@
         }
 
         // --- MARKET FONKSİYONLARI ---
-        function openMarket() { marketPanel.classList.remove('hidden'); updateMarketUI();}
+        function openMarket() { marketPanel.classList.remove('hidden'); }
         function closeMarket() { marketPanel.classList.add('hidden'); }
         function updateMarketUI() {
-            for (const key in upgradeButtons) {
+             for (const key in upgradeButtons) {
                 const button = upgradeButtons[key];
                 const upgradeKey = key.replace('buy', '').replace('claim', '').replace(/^[A-Z]/, c => c.toLowerCase());
                 updateButtonState(button, upgrades[upgradeKey]);
