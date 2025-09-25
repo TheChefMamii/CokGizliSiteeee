@@ -24,7 +24,6 @@
         .log-entry { background-color: #fff; margin-bottom: 8px; padding: 10px; border-radius: 5px; border-left: 5px solid #ff8fab; font-size: 0.9em; opacity: 0; animation: fadeIn 0.5s forwards; }
         @keyframes fadeIn { to { opacity: 1; } }
 
-        /* YENİDEN EKLENDİ: Kaydır Yazısı Stili */
         .scroll-prompt { position: fixed; left: 10px; top: 50%; transform: translateY(-50%); writing-mode: vertical-rl; font-size: 1.2em; font-weight: bold; color: #FF0000; opacity: 0.7; z-index: 100; letter-spacing: 5px; pointer-events: none; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: translateY(-50%) scale(1); } 50% { transform: translateY(-50%) scale(1.1); } 100% { transform: translateY(-50%) scale(1); } }
 
@@ -87,7 +86,8 @@
         </div>
         <div class="main-text" id="mainText">Seni <span class="cok-word">ÇOK</span> seviyorum ❤️</div>
         <div class="cok-container" id="cokContainer"></div>
-        <div class="scroll-prompt">KAYDIR</div> <button id="marketButton" class="market-button">🛒 Market</button>
+        <div class="scroll-prompt">KAYDIR</div>
+        <button id="marketButton" class="market-button">🛒 Market</button>
 
         <div id="marketPanel" class="market-panel hidden">
             <h2>Market</h2>
@@ -219,6 +219,7 @@
                 "Sana olan sevgimi tarif etmeye...",
                 "Bu sonsuzluk matematikle açıklanacak bir şey değil"
             ];
+
             for (const sceneText of cinematicScenes) {
                 const p = document.createElement('p');
                 p.textContent = sceneText;
@@ -309,7 +310,7 @@
         function buyMultiplier10() { if (buyUpgrade('multiplier10')) closeMarket(); }
         function buyRainbowText() { if (buyUpgrade('rainbowText')) { if (rainbowInterval) clearInterval(rainbowInterval); rainbowInterval = setInterval(() => { mainText.style.color = `#${Math.floor(Math.random()*16777215).toString(16).padStart(6, '0')}`; }, 1000); closeMarket(); } }
         function buyFlyingHearts() { if (buyUpgrade('flyingHearts')) closeMarket(); }
-        function createFlyingHeart() { const heart = document.createElement('div'); heart.innerHTML = '❤️'; heart.style.cssText = `position: fixed; left: ${Math.random() * 100}vw; top: ${Math.random() * 100}vh; font-size: ${Math.random() * 20 + 15}px; opacity: 0; transition: all 2s ease-out; z-index: 10; pointer-events: none;`; document.body.appendChild(heart); setTimeout(() => { heart.style.opacity = '1'; heart.style.transform = 'translateY(-100px)'; }, 10); setTimeout(() => heart.remove(), 2000); }
+        function createFlyingHeart() { const heart = document.createElement('div'); heart.innerHTML = '❤️'; heart.style.cssText = `position: fixed; left: ${Math.random() * 100}vw; top: ${Math.random() * 100}vh; font-size: ${Math.random() * 20 + 15}px; opacity: 0; transition: all 2s ease-out; z-index: 10; pointer-events: none;`; document.body.appendChild(heart); setTimeout(() => { heart.style.opacity = '1'; heart.style.transform = 'translateY(-100px)'; }, 10); setTimeout(() => { heart.remove(), 2000); }
 
         // --- OLAY DİNLEYİCİLERİ ---
         marketButton.addEventListener('click', openMarket);
