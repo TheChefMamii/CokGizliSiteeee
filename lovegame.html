@@ -8,15 +8,18 @@
         /* Ana Stiller */
         html { scroll-behavior: smooth; }
         body { margin: 0; padding: 0; font-family: 'Arial', sans-serif; background-color: #FFFFFF; display: flex; justify-content: center; overflow-x: hidden; position: relative; min-height: 100vh; }
-        .page-wrapper { position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; transition: opacity 0.5s; }
-        .counter { position: fixed; top: 20px; right: 20px; font-size: 2em; font-weight: bold; color: #FF0000; z-index: 101; background-color: rgba(255, 255, 255, 0.7); padding: 5px 10px; border-radius: 5px; }
-        .main-text { font-size: 3em; font-weight: bold; color: #FF0000; margin-top: 100px; text-align: center; white-space: nowrap; transition: color 0.5s; }
-        .cok-container { display: flex; flex-direction: column; align-items: flex-start;  width: 100%; margin-top: 10px; }
+        
+        /* DÜZELTME: Hizalama artık CSS ile yapılıyor, her ekranda ortalı olacak */
+        .page-wrapper { position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; transition: opacity 0.5s; padding: 0 10px; box-sizing: border-box; }
+        .cok-container { display: flex; flex-direction: column; align-items: center;  width: 100%; margin-top: 10px; }
+
+        .counter { position: fixed; top: 10px; right: 10px; font-size: 1.5em; font-weight: bold; color: #FF0000; z-index: 101; background-color: rgba(255, 255, 255, 0.7); padding: 5px 10px; border-radius: 5px; }
+        .main-text { font-size: 3em; font-weight: bold; color: #FF0000; margin-top: 100px; text-align: center; transition: color 0.5s; }
         .cok-item { font-size: 2.5em; font-weight: bold; color: #FF0000; margin-bottom: 10px; opacity: 0; transition: opacity 0.5s ease-in-out; white-space: nowrap; }
         .cok-item.visible { opacity: 1; }
         
-        /* Mesaj Paneli */
-        .message-panel { position: fixed; top: 80px; right: 20px; width: 280px; height: 60vh; background-color: #fdf6f8; border: 2px solid #ffc2d1; border-radius: 10px; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; padding: 10px; box-sizing: border-box; transition: opacity 0.5s; }
+        /* DÜZELTME: Mesaj paneli mobil uyumlu hale getirildi */
+        .message-panel { position: fixed; top: 80px; right: 10px; width: 90%; max-width: 280px; height: 50vh; background-color: #fdf6f8; border: 2px solid #ffc2d1; border-radius: 10px; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; padding: 10px; box-sizing: border-box; transition: opacity 0.5s; }
         .panel-header { font-size: 1.2em; font-weight: bold; text-align: center; padding-bottom: 10px; border-bottom: 1px solid #ffc2d1; color: #e15c82; }
         .message-log { flex-grow: 1; overflow-y: auto; padding-top: 10px; }
         .log-entry { background-color: #fff; margin-bottom: 8px; padding: 10px; border-radius: 5px; border-left: 5px solid #ff8fab; font-size: 0.9em; opacity: 0; animation: fadeIn 0.5s forwards; }
@@ -25,38 +28,40 @@
         /* Final Sahnesi ve Sinematik */
         .blackout-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: black; z-index: 9998; opacity: 0; pointer-events: none; transition: opacity 2s ease-in-out; }
         .blackout-overlay.active { opacity: 1; pointer-events: auto; }
-        .final-sequence { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; pointer-events: none; }
+        .final-sequence { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; pointer-events: none; text-align: center; padding: 15px; box-sizing: border-box;}
         .final-sequence.active { pointer-events: auto; }
         .final-sequence.hidden { display: none; }
-        #finalCounter { font-size: 6em; font-weight: bold; color: #ffffff; text-shadow: 0 0 20px #ff00de, 0 0 30px #ff00de, 0 0 10px #ffffff; transition: opacity 1s ease-in-out; }
-        .cinematic-sequence { position: absolute; width: 80%; max-width: 800px; text-align: center; }
-        .cinematic-text { color: white; font-size: 1.8em; opacity: 0; transition: opacity 1.5s ease-in-out; line-height: 1.5; font-weight: bold; text-shadow: 0 0 10px rgba(255, 255, 255, 0.7); }
+        #finalCounter { font-size: 5em; font-weight: bold; color: #ffffff; text-shadow: 0 0 20px #ff00de, 0 0 30px #ff00de, 0 0 10px #ffffff; transition: opacity 1s ease-in-out; }
+        .cinematic-sequence { position: absolute; width: 90%; max-width: 800px; text-align: center; }
+        .cinematic-text { color: white; font-size: 1.5em; opacity: 0; transition: opacity 1.5s ease-in-out; line-height: 1.5; font-weight: bold; text-shadow: 0 0 10px rgba(255, 255, 255, 0.7); }
         .cinematic-text.visible { opacity: 1; }
-        .final-poem { color: white; font-size: 1.5em; text-align: center; white-space: pre-wrap; opacity: 0; transition: opacity 2s ease-in-out; line-height: 1.6; }
+        .final-poem { color: white; font-size: 1.2em; text-align: center; white-space: pre-wrap; opacity: 0; transition: opacity 2s ease-in-out; line-height: 1.6; }
         .return-button { padding: 15px 30px; font-size: 1.2em; cursor: pointer; background-color: #fff; color: #000; border: none; border-radius: 50px; opacity: 0; transition: opacity 2s ease-in-out; margin-top: 40px; }
         .final-poem.visible, .return-button.visible { opacity: 1; }
         @keyframes flyAcross { from { transform: translateX(-20vw); opacity: 0.7; } to { transform: translateX(120vw); opacity: 0; } }
         .flying-cok { position: fixed; z-index: 9998; color: #ff00de; font-size: 2.5em; font-weight: bold; text-shadow: 0 0 10px white; pointer-events: none; opacity: 0; animation-name: flyAcross; animation-timing-function: linear; }
 
-        /* Market */
-        .market-button { position: fixed; top: 20px; left: 20px; padding: 10px 15px; font-size: 1.2em; font-weight: bold; background-color: #FFD700; color: #333; border: 2px solid #DAA520; border-radius: 8px; cursor: pointer; z-index: 101; transition: opacity 0.5s; }
-        .market-panel { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 380px; max-height: 80vh; overflow-y: auto; background-color: white; border: 3px solid #FFD700; border-radius: 10px; padding: 20px; z-index: 102; box-shadow: 0 0 20px rgba(0,0,0,0.5); text-align: center; }
+        /* DÜZELTME: Market mobil uyumlu hale getirildi */
+        .market-button { position: fixed; top: 10px; left: 10px; padding: 10px 15px; font-size: 1em; font-weight: bold; background-color: #FFD700; color: #333; border: 2px solid #DAA520; border-radius: 8px; cursor: pointer; z-index: 101; transition: opacity 0.5s; }
+        .market-panel { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 380px; max-height: 80vh; overflow-y: auto; background-color: white; border: 3px solid #FFD700; border-radius: 10px; padding: 20px; z-index: 102; box-shadow: 0 0 20px rgba(0,0,0,0.5); text-align: center; box-sizing: border-box; }
         .market-panel.hidden { display: none; }
-        .market-item { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
-        .market-item:last-child { border-bottom: none; }
         .market-item p { margin: 5px 0 10px 0; font-size: 0.9em; color: #555;}
         .buy-button { padding: 8px 16px; border-radius: 5px; border: none; background-color: #4CAF50; color: white; cursor: pointer; }
         .buy-button:disabled { background-color: #ccc; }
         .close-button { margin-top: 20px; padding: 10px 20px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer;}
         
-        /* Yukarı Dön Butonu */
-        #scrollTopButton {
-            display: none; position: fixed; bottom: 20px; right: 30px; z-index: 99;
-            font-size: 24px; border: none; outline: none; background-color: #FF0000;
-            color: white; cursor: pointer; padding: 10px 15px; border-radius: 50%;
-            opacity: 0.7; transition: opacity 0.3s;
-        }
+        #scrollTopButton { display: none; position: fixed; bottom: 20px; right: 20px; z-index: 99; font-size: 20px; border: none; outline: none; background-color: #FF0000; color: white; cursor: pointer; padding: 10px 15px; border-radius: 50%; opacity: 0.7; transition: opacity 0.3s; }
         #scrollTopButton:hover { opacity: 1; }
+        
+        /* YENİ: MOBİL UYUMLULUK (Responsive Design) */
+        @media (max-width: 768px) {
+            .main-text { font-size: 2.2em; white-space: normal; margin-top: 80px; }
+            .cok-item { font-size: 1.8em; }
+            .message-panel { display: none; } /* Telefonda mesaj panelini gizle */
+            #finalCounter { font-size: 3.5em; }
+            .cinematic-text { font-size: 1.2em; }
+            .final-poem { font-size: 1em; }
+        }
     </style>
 </head>
 <body>
@@ -77,7 +82,7 @@
             <div class="panel-header">💌 Özel Mesajlar 💌</div>
             <div id="messageLog" class="message-log"></div>
         </div>
-        <div class="main-text" id="mainText"> Seni <span class="cok-word">ÇOK</span> seviyorum ❤️ </div>
+        <div class="main-text" id="mainText">Seni <span class="cok-word">ÇOK</span> seviyorum ❤️</div>
         <div class="cok-container" id="cokContainer"></div>
         <button id="marketButton" class="market-button">🛒 Market</button>
 
@@ -85,7 +90,7 @@
             <h2>Market</h2>
             <p>Harcanabilir Bakiye: <span id="marketCokCount">0</span></p>
             <div class="market-item">
-                <strong>Senin İçin Hediye ❤️</strong><p>Beklenmedik bir anda gelen en güzel hediye! Anında 10.000 ÇOK kazandırır.</p>
+                <strong>Senin İçin Hediye ❤️</strong><p>Anında 10.000 ÇOK kazandırır.</p>
                 <button id="claimFreeBonus" class="buy-button" data-cost="0">Ücretsiz Al</button>
             </div>
             <hr><h4>Aşk Çarpanları</h4>
@@ -112,11 +117,9 @@
         const cokContainer = document.getElementById('cokContainer');
         const cokCounter = document.getElementById('cokCounter');
         const mainText = document.getElementById('mainText');
-        const mainCokWord = document.querySelector('.main-text .cok-word');
-
         
         let cokCount = 0; let totalCoksGenerated = 0;
-        const initialCoks = 40; // DÜZELTME: Başlangıç değerini artırdık
+        const initialCoks = 50; // Mobil için başlangıç değeri artırıldı
         const loadMoreOffset = 200;
         let coksPerScroll = 10;
         let rainbowInterval = null;
@@ -160,7 +163,6 @@
             2500: "hala devammı ediyosunnnn",
             2700: "Tamamm 3000 de birakabilirsin parmağın yorulmasın",
         };
-
         // --- TEMEL FONKSİYONLAR ---
         function addCok(count) {
             cokCount += count;
@@ -169,7 +171,7 @@
                 const cokDiv = document.createElement('div');
                 cokDiv.classList.add('cok-item');
                 cokDiv.textContent = 'ÇOK';
-                cokDiv.style.marginLeft = `${mainCokWord.getBoundingClientRect().left}px`;
+                // DÜZELTME: Hizalama artık CSS ile yapıldığı için JS satırı SİLİNDİ.
                 cokContainer.appendChild(cokDiv);
                 setTimeout(() => cokDiv.classList.add('visible'), 50 * i);
             }
@@ -181,8 +183,10 @@
             logEntry.classList.add('log-entry');
             logEntry.innerHTML = `<strong>${milestone.toLocaleString('tr-TR')} ÇOK:</strong> ${message}`;
             logEntry.dataset.count = milestone;
-            messageLog.appendChild(logEntry);
-            messageLog.scrollTop = messageLog.scrollHeight;
+            if (messageLog.parentElement.style.display !== 'none') {
+                messageLog.appendChild(logEntry);
+                messageLog.scrollTop = messageLog.scrollHeight;
+            }
         }
 
         function updateCounters() {
@@ -208,9 +212,8 @@
             const cinematicScenes = [
                 "Matematikçiler sayılar bulmuşlar çoklukları açıklamak için",
                 "Pi sayısının trilyonlarca basamağını hesaplamışlar",
-                "400 basamaklı sayılar isimlendirmişler",
                 "Ama keşfettikleri en büyük sayılar bile yeterli olmadı",
-                "Burada yazması gereken çok sayısını açıklayacak kadar",
+                "Sana olan sevgimi tarif etmeye...",
                 "Bu sonsuzluk matematikle açıklanacak bir şey değil"
             ];
 
@@ -222,7 +225,7 @@
                 cinematicContainer.appendChild(p);
                 await sleep(100);
                 p.classList.add('visible');
-                await sleep(4000);
+                await sleep(3500);
                 p.classList.remove('visible');
                 await sleep(1500);
             }
@@ -247,16 +250,19 @@
 
             let currentCount = totalCoksGenerated;
             finalCounter.textContent = Math.floor(currentCount).toLocaleString('tr-TR');
-            const targetCount = 1000000000;
+            const targetCount = 100000000;
 
-            const flyingCokInterval = setInterval(() => { const cok = document.createElement('div'); cok.textContent = 'ÇOK'; cok.classList.add('flying-cok'); cok.style.top = `${Math.random() * 100}vh`; cok.style.animationDuration = `${Math.random() * 2 + 1}s`; document.body.appendChild(cok); setTimeout(() => cok.remove(), 3000); }, 200);
+            const flyingCokInterval = setInterval(() => { const cok = document.createElement('div'); cok.textContent = 'ÇOK'; cok.classList.add('flying-cok'); cok.style.top = `${Math.random() * 100}vh`; cok.style.animationDuration = `${Math.random() * 2 + 1}s`; document.body.appendChild(cok); setTimeout(() => cok.remove(), 3000); }, 250);
 
             const counterInterval = setInterval(() => {
-                currentCount += currentCount * 0.1;
+                currentCount += currentCount * 0.08;
                 if (currentCount >= targetCount) {
                     currentCount = targetCount;
                     clearInterval(counterInterval);
-                    setTimeout(() => clearInterval(flyingCokInterval), 2000);
+                    setTimeout(() => {
+                        document.querySelectorAll('.flying-cok').forEach(el => el.remove());
+                        clearInterval(flyingCokInterval);
+                    }, 2000);
                     finalCounter.style.opacity = '0';
                     playCinematic();
                 }
@@ -265,7 +271,7 @@
         }
 
         // --- MARKET FONKSİYONLARI ---
-        function openMarket() { marketPanel.classList.remove('hidden'); }
+        function openMarket() { marketPanel.classList.remove('hidden'); updateMarketUI();}
         function closeMarket() { marketPanel.classList.add('hidden'); }
         function updateMarketUI() {
             for (const key in upgradeButtons) {
@@ -286,31 +292,21 @@
                 }
             }
         }
-        
-        function recalculateScrollProduction() { 
-            coksPerScroll = 10 * (upgrades.multiplier10 ? 10 : 1); 
-        }
-
+        function recalculateScrollProduction() { coksPerScroll = 10 * (upgrades.multiplier10 ? 10 : 1); }
         function buyUpgrade(upgradeKey) {
             let buttonId = "buy" + upgradeKey.charAt(0).toUpperCase() + upgradeKey.slice(1);
             if (upgradeKey === 'freeBonus') buttonId = 'claimFreeBonus';
             const button = document.getElementById(buttonId);
             const cost = parseInt(button.dataset.cost);
             if (cokCount >= cost && !upgrades[upgradeKey]) {
-                cokCount -= cost;
-                upgrades[upgradeKey] = true;
-                recalculateScrollProduction();
-                updateCounters();
-                return true;
+                cokCount -= cost; upgrades[upgradeKey] = true; recalculateScrollProduction(); updateCounters(); return true;
             }
             return false;
         }
-
         function claimFreeBonus() { if (!upgrades.freeBonus) { upgrades.freeBonus = true; cokCount += 10000; updateCounters(); closeMarket(); } }
         function buyMultiplier10() { if (buyUpgrade('multiplier10')) closeMarket(); }
         function buyRainbowText() { if (buyUpgrade('rainbowText')) { if (rainbowInterval) clearInterval(rainbowInterval); rainbowInterval = setInterval(() => { mainText.style.color = `#${Math.floor(Math.random()*16777215).toString(16).padStart(6, '0')}`; }, 1000); closeMarket(); } }
         function buyFlyingHearts() { if (buyUpgrade('flyingHearts')) closeMarket(); }
-
         function createFlyingHeart() { const heart = document.createElement('div'); heart.innerHTML = '❤️'; heart.style.cssText = `position: fixed; left: ${Math.random() * 100}vw; top: ${Math.random() * 100}vh; font-size: ${Math.random() * 20 + 15}px; opacity: 0; transition: all 2s ease-out; z-index: 10; pointer-events: none;`; document.body.appendChild(heart); setTimeout(() => { heart.style.opacity = '1'; heart.style.transform = 'translateY(-100px)'; }, 10); setTimeout(() => heart.remove(), 2000); }
 
         // --- OLAY DİNLEYİCİLERİ ---
@@ -327,16 +323,10 @@
         window.addEventListener('scroll', () => {
             if (finalSequenceContainer.classList.contains('active')) return;
             scrollTopButton.style.display = (document.documentElement.scrollTop > 300) ? 'block' : 'none';
-
             const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-            if (scrollTop + clientHeight >= scrollHeight - 50) { // Offset'i biraz küçülttüm
-                addCok(coksPerScroll);
-            }
-            if (upgrades.flyingHearts && Math.random() > 0.8) {
-                createFlyingHeart();
-            }
+            if (scrollTop + clientHeight >= scrollHeight - 50) { addCok(coksPerScroll); }
+            if (upgrades.flyingHearts && Math.random() > 0.8) { createFlyingHeart(); }
         });
-
         window.addEventListener('load', () => addCok(initialCoks));
     </script>
 </body>
