@@ -9,7 +9,6 @@
         html { scroll-behavior: smooth; }
         body { margin: 0; padding: 0; font-family: 'Arial', sans-serif; background-color: #FFFFFF; display: flex; justify-content: center; overflow-x: hidden; position: relative; min-height: 100vh; }
         
-        /* DÜZELTME: Hizalama artık CSS ile yapılıyor, her ekranda ortalı olacak */
         .page-wrapper { position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; transition: opacity 0.5s; padding: 0 10px; box-sizing: border-box; }
         .cok-container { display: flex; flex-direction: column; align-items: center;  width: 100%; margin-top: 10px; }
 
@@ -68,8 +67,7 @@
 </head>
 <body>
     <button id="scrollTopButton">⬆️</button>
-
-    <div id="blackout-overlay" class="blackout-overlay"></div>
+    <div class="counter" id="cokCounter"></div> <div id="blackout-overlay" class="blackout-overlay"></div>
     
     <div id="finalSequence" class="final-sequence hidden">
         <div id="cinematicSequence" class="cinematic-sequence"></div>
@@ -79,7 +77,6 @@
     </div>
 
     <div class="page-wrapper" id="pageWrapper">
-        <div class="counter" id="cokCounter"></div>
         <div id="messagePanel" class="message-panel">
             <div class="panel-header">💌 Özel Mesajlar 💌</div>
             <div id="messageLog" class="message-log"></div>
@@ -175,7 +172,7 @@
                 const cokDiv = document.createElement('div');
                 cokDiv.classList.add('cok-item');
                 cokDiv.textContent = 'ÇOK';
-                // DÜZELTME: Hizalama artık CSS ile yapıldığı için JS satırı SİLİNDİ.
+                // HİZALAMA SATIRI SİLİNDİ, ARTIK CSS YAPIYOR.
                 cokContainer.appendChild(cokDiv);
                 setTimeout(() => cokDiv.classList.add('visible'), 50 * i);
             }
@@ -274,7 +271,7 @@
         }
 
         // --- MARKET FONKSİYONLARI ---
-        function openMarket() { marketPanel.classList.remove('hidden'); }
+        function openMarket() { marketPanel.classList.remove('hidden'); updateMarketUI(); }
         function closeMarket() { marketPanel.classList.add('hidden'); }
         function updateMarketUI() {
              for (const key in upgradeButtons) {
@@ -310,7 +307,7 @@
         function buyMultiplier10() { if (buyUpgrade('multiplier10')) closeMarket(); }
         function buyRainbowText() { if (buyUpgrade('rainbowText')) { if (rainbowInterval) clearInterval(rainbowInterval); rainbowInterval = setInterval(() => { mainText.style.color = `#${Math.floor(Math.random()*16777215).toString(16).padStart(6, '0')}`; }, 1000); closeMarket(); } }
         function buyFlyingHearts() { if (buyUpgrade('flyingHearts')) closeMarket(); }
-        function createFlyingHeart() { const heart = document.createElement('div'); heart.innerHTML = '❤️'; heart.style.cssText = `position: fixed; left: ${Math.random() * 100}vw; top: ${Math.random() * 100}vh; font-size: ${Math.random() * 20 + 15}px; opacity: 0; transition: all 2s ease-out; z-index: 10; pointer-events: none;`; document.body.appendChild(heart); setTimeout(() => { heart.style.opacity = '1'; heart.style.transform = 'translateY(-100px)'; }, 10); setTimeout(() => { heart.remove(), 2000); }
+        function createFlyingHeart() { const heart = document.createElement('div'); heart.innerHTML = '❤️'; heart.style.cssText = `position: fixed; left: ${Math.random() * 100}vw; top: ${Math.random() * 100}vh; font-size: ${Math.random() * 20 + 15}px; opacity: 0; transition: all 2s ease-out; z-index: 10; pointer-events: none;`; document.body.appendChild(heart); setTimeout(() => { heart.style.opacity = '1'; heart.style.transform = 'translateY(-100px)'; }, 10); setTimeout(() => heart.remove(), 2000); }
 
         // --- OLAY DİNLEYİCİLERİ ---
         marketButton.addEventListener('click', openMarket);
