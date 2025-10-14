@@ -60,14 +60,6 @@ button {
     0% { opacity:0; transform: translate(-50%, -50%) scale(0.5);}
     100% { opacity:1; transform: translate(-50%, -50%) scale(1);}
 }
-#acceptText {
-    position: absolute;
-    top:40%; left:50%;
-    transform: translate(-50%, -50%);
-    font-size: 4em;
-    color: #ff69b4;
-    display:none;
-}
 </style>
 </head>
 <body>
@@ -77,13 +69,10 @@ button {
     <button id="hayir">Hayır(nası yaa)</button>
 </div>
 
-<div id="acceptText">AAA kabul ettin!</div>
-
 <script>
 const evetBtn = document.getElementById('evet');
 const hayirBtn = document.getElementById('hayir');
 const centerText = document.getElementById('centerText');
-const acceptText = document.getElementById('acceptText');
 
 let evetScale = 1;
 let hayirScale = 1;
@@ -117,7 +106,6 @@ hayirBtn.addEventListener('click', ()=>{
     if(hayirIndex === hayirMetinleri.length){
         hayirBtn.style.display='none';
         centerText.style.display='none';
-        acceptText.style.display='block';
     }
 });
 
@@ -126,7 +114,6 @@ evetBtn.addEventListener('click', ()=>{
     evetBtn.style.display='none';
     hayirBtn.style.display='none';
     centerText.style.display='none';
-    acceptText.style.display='block';
 
     // Çiçek animasyonu
     for(let i=0;i<100;i++){
