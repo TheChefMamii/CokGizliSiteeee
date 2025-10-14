@@ -3,67 +3,116 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Çokkk Güzelsinnnnn 💕</title>
+<title>Çok Güzelsin</title>
 <style>
-  body {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    font-family: Arial, sans-serif;
-    background: #ffe6f0;
-    text-align: center;
-  }
-  #metin {
-    font-size: 3rem;
-    transition: all 0.3s ease;
-    margin-bottom: 30px;
-  }
-  button {
-    font-size: 1.5rem;
-    margin: 10px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-  }
-  button:hover { transform: scale(1.1); }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+        background: #000;
+        color: #fff;
+        font-family: 'Arial', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+        position: relative;
+    }
+    .container {
+        text-align: center;
+    }
+    h1 { font-size: 4em; margin-bottom: 40px; }
+    button {
+        font-size: 1.5em;
+        padding: 15px 30px;
+        margin: 10px;
+        border-radius: 12px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    #evet { background: #e91e63; color: white; }
+    #hayir { background: #555; color: white; }
+    .hidden { display: none; }
+
+    /* Çok animasyonu */
+    .çok {
+        position: absolute;
+        color: #ff69b4;
+        font-weight: bold;
+        animation: float 3s linear infinite;
+        pointer-events: none;
+    }
+    @keyframes float {
+        0% { transform: translateY(100vh) scale(1); opacity:1; }
+        100% { transform: translateY(-100vh) scale(2); opacity:0; }
+    }
+
+    /* Güzelsin yazısı */
+    .guzelsin {
+        position: absolute;
+        top: 50%; left:50%;
+        transform: translate(-50%, -50%);
+        font-size: 6em;
+        color: #ff69b4;
+        opacity: 0;
+        animation: appear 1s forwards;
+    }
+    @keyframes appear {
+        0% { opacity:0; transform: translate(-50%, -50%) scale(0.5);}
+        100% { opacity:1; transform: translate(-50%, -50%) scale(1);}
+    }
 </style>
 </head>
 <body>
-
-<h1 id="metin">Çokkk güzelsinnnnn 💕</h1>
-<div>
-  <button onclick="evet()">Evet</button>
-  <button onclick="hayir()">Hayır</button>
+<div class="container" id="game">
+    <h1>Çok Güzelsin</h1>
+    <button id="evet">Evet</button>
+    <button id="hayir">Hayır</button>
 </div>
 
 <script>
-let metin = document.getElementById('metin');
-let buyukluk = 3; // başlangıç font-size rem
-const hayirMesajlar = [
-  "Hmm, kabul etme ama içten biliyorum 😉",
-  "Pek inandırıcı olmadı ama yine de güzelsin 😏",
-  "Yalan söyleme, bakışlarından belli 😘",
-  "Hayır mı dedin? Öyleyse daha da güzelsin! 💖"
-];
+const evetBtn = document.getElementById('evet');
+const hayirBtn = document.getElementById('hayir');
+const game = document.getElementById('game');
 
-function evet() {
-  buyukluk += 0.3;
-  metin.style.fontSize = buyukluk + 'rem';
-  metin.textContent = "Daha da güzelsin 😍";
-}
+let evetScale = 1;
+let hayirScale = 1;
 
-function hayir() {
-  const mesaj = hayirMesajlar[Math.floor(Math.random() * hayirMesajlar.length)];
-  metin.textContent = mesaj;
-  metin.style.color = '#' + Math.floor(Math.random()*16777215).toString(16); // rastgele renk
-  metin.style.transform = 'rotate(' + (Math.random()*10-5) + 'deg)';
-  setTimeout(()=>metin.style.transform='rotate(0deg)', 300);
-}
+hayirBtn.addEventListener('click', ()=>{
+    hayirScale *= 0.8; // küçül
+    evetScale *= 1.2; // büyü
+    hayirBtn.style.transform = `scale(${hayirScale})`;
+    evetBtn.style.transform = `scale(${evetScale})`;
+});
+
+// Evet basınca animasyon
+evetBtn.addEventListener('click', ()=>{
+    // Butonları gizle
+    evetBtn.style.display='none';
+    hayirBtn.style.display='none';
+
+    // Çok yazıları üret
+    for(let i=0;i<100;i++){
+        const span = document.createElement('span');
+        span.classList.add('çok');
+        span.style.left = Math.random()*100 + 'vw';
+        span.style.fontSize = (Math.random()*2+1) + 'em';
+        span.style.animationDuration = (Math.random()*3+2)+'s';
+        span.innerText = 'Çok';
+        document.body.appendChild(span);
+    }
+
+    // Güzelsin yazısı
+    const guzelsin = document.createElement('div');
+    guzelsin.classList.add('guzelsin');
+    guzelsin.innerText = 'GÜZELSİN';
+    document.body.appendChild(guzelsin);
+
+    // 5 saniye sonra ana menüye dön
+    setTimeout(()=>{
+        window.location.href = 'index.html';
+    }, 5000);
+});
 </script>
-
 </body>
 </html>
