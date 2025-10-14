@@ -8,11 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Roboto', sans-serif;
             background: linear-gradient(-45deg, #f8bbd0, #e91e63, #bbdefb, #90caf9);
@@ -49,10 +45,7 @@
             animation: fadeIn 1s ease-out;
             transition: transform 0.1s ease;
         }
-        @keyframes fadeIn {
-            0% { opacity: 0; transform: scale(0.95); }
-            100% { opacity: 1; transform: scale(1); }
-        }
+        @keyframes fadeIn { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
         h1 {
             font-family: 'Playfair Display', serif;
             font-size: 2.5em; color: #e91e63;
@@ -71,11 +64,8 @@
         .box .number { font-size: 2.3em; font-weight: 700; }
         .box .label { font-size: 0.8em; text-transform: uppercase; font-weight: 400; }
         .number.flip { animation: flipDown 0.5s ease-out; }
-        @keyframes flipDown {
-            0% { transform: translateY(-100%); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
-        }
-        .button-container { display: flex; justify-content: center; gap: 15px; margin-top: 25px; }
+        @keyframes flipDown { 0% { transform: translateY(-100%); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+        .button-container { display: flex; justify-content: center; gap: 15px; margin-top: 25px; flex-wrap: wrap; }
         .button {
             text-decoration: none; color: white;
             background: #e91e63;
@@ -88,6 +78,15 @@
             background: #f06292;
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(233, 30, 99, 0.5);
+        }
+        #bunuBiliyor {
+            background: rgba(255, 182, 193, 0.2);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: 500;
+            color: #e91e63;
         }
     </style>
 </head>
@@ -102,55 +101,69 @@
             <div class="box"><span id="minutes" class="number">0</span><span class="label">Dakika</span></div>
             <div class="box"><span id="seconds" class="number">0</span><span class="label">Saniye</span></div>
         </div>
+
+        <!-- Bunu Biliyor Musun Bölümü -->
+        <div id="bunuBiliyor">...</div>
+
         <div class="button-container">
             <a href="reasons.html" class="button">Seni Sevmemin Nedenleri</a>
-            <a href="lovegame.html" class="button"> yeni bir şeyyy</a>
+            <a href="lovegame.html" class="button">Yeni Mini Oyun</a>
         </div>
     </div>
+
     <script>
+        // Sayaç
         const baslangicTarihi = new Date(2025, 4, 30, 6, 16, 0);
-        const counterSpans = {
-            days: document.getElementById('days'),
-            hours: document.getElementById('hours'),
-            minutes: document.getElementById('minutes'),
-            seconds: document.getElementById('seconds')
-        };
+        const counterSpans = { days: document.getElementById('days'), hours: document.getElementById('hours'), minutes: document.getElementById('minutes'), seconds: document.getElementById('seconds') };
         function updateCounter() {
             const simdi = new Date();
             const fark = simdi - baslangicTarihi;
-            if (fark < 0) return;
-            const days = Math.floor(fark / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((fark % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((fark % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((fark % (1000 * 60)) / 1000);
+            if(fark<0) return;
+            const days = Math.floor(fark / (1000*60*60*24));
+            const hours = Math.floor((fark % (1000*60*60*24))/(1000*60*60));
+            const minutes = Math.floor((fark % (1000*60*60))/(1000*60));
+            const seconds = Math.floor((fark % (1000*60))/1000);
             updateSpan(counterSpans.days, days);
             updateSpan(counterSpans.hours, hours);
             updateSpan(counterSpans.minutes, minutes);
             updateSpan(counterSpans.seconds, seconds);
         }
         function updateSpan(span, value) {
-            if (span.innerText !== String(value)) {
+            if(span.innerText !== String(value)){
                 span.classList.add('flip');
                 span.innerText = value;
-                span.addEventListener('animationend', () => {
-                    span.classList.remove('flip');
-                }, { once: true });
+                span.addEventListener('animationend', ()=>{span.classList.remove('flip');}, {once:true});
             }
         }
+        setInterval(updateCounter,1000);
+        updateCounter();
+
+        // 3D Card Hover
         const card = document.querySelector('.main-card');
-        card.addEventListener('mousemove', (e) => {
-            const { left, top, width, height } = card.getBoundingClientRect();
-            const x = e.clientX - left - width / 2;
-            const y = e.clientY - top - height / 2;
-            const rotateX = (y / height) * -30;
-            const rotateY = (x / width) * 30;
+        card.addEventListener('mousemove', (e)=>{
+            const {left, top, width, height} = card.getBoundingClientRect();
+            const x = e.clientX - left - width/2;
+            const y = e.clientY - top - height/2;
+            const rotateX = (y/height)*-30;
+            const rotateY = (x/width)*30;
             card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
         });
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'rotateX(0) rotateY(0)';
-        });
-        updateCounter();
-        setInterval(updateCounter, 1000);
+        card.addEventListener('mouseleave', ()=>{ card.style.transform = 'rotateX(0) rotateY(0)'; });
+
+        // Bunu Biliyor Musun
+        const bilgiler = [
+            "Biliyor muydun? Gülmek kalbi güçlendirir!",
+            "Biliyor muydun? Bir bardak su, sabah metabolizmayı hızlandırır.",
+            "Biliyor muydun? Sevdiklerinle geçirilen zaman stresi azaltır.",
+            "Biliyor muydun? Küçük bir yürüyüş bile enerji verir.",
+            "Biliyor muydun? Pozitif düşünmek mutluluğu artırır."
+        ];
+        function yeniBilgi(){
+            const tarih = new Date();
+            const index = tarih.getDate() % bilgiler.length;
+            document.getElementById('bunuBiliyor').textContent = bilgiler[index];
+        }
+        yeniBilgi();
     </script>
 </body>
 </html>
