@@ -21,8 +21,8 @@ body {
     text-align: center;
 }
 #centerText {
-    font-size: 4em;
-    margin-bottom: 40px;
+    font-size: 3em;
+    margin-bottom: 30px;
     transition: all 0.3s ease;
 }
 button {
@@ -35,7 +35,7 @@ button {
     transition: all 0.3s ease;
 }
 #evet { background: #e91e63; color: white; }
-#hayir { background: #555; color: white; }
+#hayir { background: #555; color: white; position: absolute; bottom: 20px; right: 20px; }
 .gizle { display: none; }
 .cok {
     position: absolute;
@@ -61,6 +61,23 @@ button {
     0% { opacity:0; transform: translate(-50%, -50%) scale(0.5);}
     100% { opacity:1; transform: translate(-50%, -50%) scale(1);}
 }
+#bigHayir {
+    position: absolute;
+    top:50%; left:50%;
+    transform: translate(-50%, -50%);
+    font-size: 6em;
+    color: #ff4444;
+    display:none;
+    cursor:pointer;
+}
+#acceptText {
+    position: absolute;
+    top:50%; left:50%;
+    transform: translate(-50%, -50%);
+    font-size: 4em;
+    color: #ff69b4;
+    display:none;
+}
 </style>
 </head>
 <body>
@@ -70,10 +87,15 @@ button {
     <button id="hayir">Hayır(nası yaa)</button>
 </div>
 
+<div id="bigHayir">HAYIR</div>
+<div id="acceptText">AAA kabul ettin!</div>
+
 <script>
 const evetBtn = document.getElementById('evet');
 const hayirBtn = document.getElementById('hayir');
 const centerText = document.getElementById('centerText');
+const bigHayir = document.getElementById('bigHayir');
+const acceptText = document.getElementById('acceptText');
 let evetScale = 1;
 let hayirScale = 1;
 
@@ -82,7 +104,11 @@ const hayirMetinleri = [
     "Yine mi?",
     "diğer butona basmayı dene(doğru seçenek o)",
     "hadi amaaa",
-    "evete bas(doğruseçenekoipucu)"
+    "evete bas(doğru seçenek o)",
+    "nasıl bilmiyorsunnn",
+    "hala nasıl basabiliyorsun",
+    "yok bunada basmışsan olmicak böyle"
+    
 ];
 
 let hayirIndex = 0;
@@ -93,14 +119,48 @@ hayirBtn.addEventListener('click', ()=>{
     hayirBtn.style.transform = `scale(${hayirScale})`;
     evetBtn.style.transform = `scale(${evetScale})`;
 
-    // Ortadaki metni değiştir
     centerText.innerText = hayirMetinleri[hayirIndex % hayirMetinleri.length];
+    
+    // Son hayır geldiğinde büyük HAYIR göster
+    if(hayirIndex === hayirMetinleri.length-1){
+        bigHayir.style.display='block';
+        hayirBtn.style.display='none';
+        centerText.style.display='none';
+    }
+
     hayirIndex++;
 });
 
-// Evet basınca animasyon
+// Büyük HAYIR'a basınca
+bigHayir.addEventListener('click', ()=>{
+    bigHayir.style.display='none';
+    evetBtn.style.display='block';
+    acceptText.style.display='block';
+
+    // Çok yazıları üret
+    for(let i=0;i<100;i++){
+        const span = document.createElement('span');
+        span.classList.add('cok');
+        span.style.left = Math.random()*100 + 'vw';
+        span.style.fontSize = (Math.random()*2+1) + 'em';
+        span.style.animationDuration = (Math.random()*3+2)+'s';
+        span.innerText = 'Çok';
+        document.body.appendChild(span);
+    }
+
+    const guzelsin = document.createElement('div');
+    guzelsin.classList.add('guzelsin');
+    guzelsin.innerText = 'GÜZELSİN';
+    document.body.appendChild(guzelsin);
+
+    // 5 saniye sonra ana menüye dön
+    setTimeout(()=>{
+        window.location.href = 'index.html';
+    }, 5000);
+});
+
+// Evet butonu normal işleyiş
 evetBtn.addEventListener('click', ()=>{
-    // Butonları ve ortadaki metni gizle
     evetBtn.style.display='none';
     hayirBtn.style.display='none';
     centerText.style.display='none';
@@ -116,13 +176,11 @@ evetBtn.addEventListener('click', ()=>{
         document.body.appendChild(span);
     }
 
-    // Güzelsin yazısı
     const guzelsin = document.createElement('div');
     guzelsin.classList.add('guzelsin');
     guzelsin.innerText = 'GÜZELSİN';
     document.body.appendChild(guzelsin);
 
-    // 5 saniye sonra ana menüye dön
     setTimeout(()=>{
         window.location.href = 'index.html';
     }, 5000);
