@@ -35,7 +35,7 @@ button {
     transition: all 0.3s ease;
 }
 #evet { background: #e91e63; color: white; }
-#hayir { background: #555; color: white; position: absolute; bottom: 20px; right: 20px; }
+#hayir { background: #555; color: white; }
 .gizle { display: none; }
 .cok {
     position: absolute;
@@ -108,7 +108,6 @@ const hayirMetinleri = [
     "nasıl bilmiyorsunnn",
     "hala nasıl basabiliyorsun",
     "yok bunada basmışsan olmicak böyle"
-    
 ];
 
 let hayirIndex = 0;
@@ -121,6 +120,19 @@ hayirBtn.addEventListener('click', ()=>{
 
     centerText.innerText = hayirMetinleri[hayirIndex % hayirMetinleri.length];
     
+    // Eğer "nasıl bilmiyorsunnn" mesajı gelirse
+    if(hayirMetinleri[hayirIndex % hayirMetinleri.length] === "nasıl bilmiyorsunnn"){
+        hayirBtn.style.position = 'absolute';
+        hayirBtn.style.bottom = '20px';
+        hayirBtn.style.right = '20px';
+        hayirBtn.style.fontSize = '2em';
+        evetBtn.style.fontSize = '2em';
+    } else {
+        hayirBtn.style.position = 'static';
+        hayirBtn.style.fontSize = '1.5em';
+        evetBtn.style.fontSize = '1.5em';
+    }
+
     // Son hayır geldiğinde büyük HAYIR göster
     if(hayirIndex === hayirMetinleri.length-1){
         bigHayir.style.display='block';
@@ -137,7 +149,6 @@ bigHayir.addEventListener('click', ()=>{
     evetBtn.style.display='block';
     acceptText.style.display='block';
 
-    // Çok yazıları üret
     for(let i=0;i<100;i++){
         const span = document.createElement('span');
         span.classList.add('cok');
@@ -153,7 +164,6 @@ bigHayir.addEventListener('click', ()=>{
     guzelsin.innerText = 'GÜZELSİN';
     document.body.appendChild(guzelsin);
 
-    // 5 saniye sonra ana menüye dön
     setTimeout(()=>{
         window.location.href = 'index.html';
     }, 5000);
@@ -165,7 +175,6 @@ evetBtn.addEventListener('click', ()=>{
     hayirBtn.style.display='none';
     centerText.style.display='none';
 
-    // Çok yazıları üret
     for(let i=0;i<100;i++){
         const span = document.createElement('span');
         span.classList.add('cok');
