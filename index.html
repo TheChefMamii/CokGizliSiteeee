@@ -102,6 +102,31 @@
             width:80px; cursor:pointer; accent-color:#e91e63;
         }
         body.dark-mode .volume-control input[type="range"] { accent-color:#bb86fc; }
+        .music-player {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        body.dark-mode .music-player { background: rgba(30, 30, 50, 0.85); color: #f0e6ff; }
+        .music-player button {
+            background: #e91e63;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        body.dark-mode .music-player button { background: #bb86fc; }
+        .music-player button:hover { background: #f06292; }
+        body.dark-mode .music-player button:hover { background: #9f6ed3; }
         canvas { position:absolute; top:0; left:0; z-index:0; }
         .youtube-player { position:absolute; top:0; left:0; width:0; height:0; }
         .message-section { margin-top:15px; display:none; }
@@ -125,6 +150,8 @@
             .theme-toggle { top:10px; right:50px; font-size:1em; padding:5px 8px; }
             .volume-control { top:50px; right:10px; }
             .volume-control input[type="range"] { width:60px; }
+            .music-player { top: 10px; left: 10px; padding: 8px; }
+            .music-player button { padding: 4px 8px; font-size: 0.8em; }
         }
         @media (max-width: 400px) {
             .main-card { padding:12px; }
@@ -161,49 +188,122 @@
             <p id="errorMessage" style="color: red; font-size: 0.8em; display: none;"></p>
         </div>
     </div>
-    <div class="music-toggle" id="musicToggle">♫</div>
+    <div class="music-toggle" id="musicToggle">🎵</div>
     <div class="theme-toggle" id="themeToggle">☀</div>
     <div class="volume-control">
         <label for="volumeSlider" style="color:#fff; font-size:0.9em;">Ses:</label>
         <input type="range" id="volumeSlider" min="0" max="50" value="10">
     </div>
+    <div class="music-player" id="musicPlayer">
+        <button id="prevButton">⏮</button>
+        <button id="playButton">▶</button>
+        <button id="nextButton">⏭</button>
+        <button id="shuffleButton">🔀</button>
+    </div>
     <div class="youtube-player">
-        <iframe id="ytPlayer" width="0" height="0" src="https://www.youtube.com/embed/aDju79MtUR8?enablejsapi=1&autoplay=0&loop=1&playlist=aDju79MtUR8" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <iframe id="ytPlayer" width="0" height="0" src="https://www.youtube.com/embed?listType=playlist&list=PLo2qK9eW2i5z9J8aN3V0X1X1X1X1X1X1&enablejsapi=1&autoplay=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
     </div>
 
     <script src="https://www.youtube.com/iframe_api"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
-        // YouTube IFrame API
+        // YouTube IFrame API ile Dolu Kadehi Ters Tut Playlist
         let player;
         let isPlaying = false;
+        let currentSongIndex = 0;
+        const playlist = [
+            "https://www.youtube.com/watch?v=5dX2X7X2X2X", // Aldatıldık (örnek ID)
+            "https://www.youtube.com/watch?v=6dY3Y3Y3Y3Y", // Dünya (örnek ID)
+            "https://www.youtube.com/watch?v=7eZ4Z4Z4Z4Z"  // Kovalar (örnek ID)
+            // Gerçek ID’leri YouTube’dan al, buraya ekle
+        ];
+        let isShuffled = false;
+        let shuffledPlaylist = [...playlist];
+
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('ytPlayer', {
+                height: '0',
+                width: '0',
+                playerVars: {
+                    'listType': 'playlist',
+                    'list': playlist.map(url => new URL(url).searchParams.get('v')).join(',')
+                },
                 events: {
-                    'onReady': onPlayerReady
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
                 }
             });
         }
+
         function onPlayerReady(event) {
-            player.setLoop(true);
             player.setVolume(10);
-            const musicToggle = document.getElementById('musicToggle');
-            musicToggle.addEventListener('click', () => {
-                if (!player) return;
-                if (isPlaying) {
-                    player.pauseVideo();
-                    musicToggle.textContent = '♫';
-                } else {
-                    player.playVideo();
-                    player.setVolume(document.getElementById('volumeSlider').value);
-                    musicToggle.textContent = '❚❚';
-                }
-                isPlaying = !isPlaying;
-            });
+            loadSong();
+            const playButton = document.getElementById('playButton');
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+            const shuffleButton = document.getElementById('shuffleButton');
             const volumeSlider = document.getElementById('volumeSlider');
-            volumeSlider.addEventListener('input', () => {
-                if (player) player.setVolume(volumeSlider.value);
-            });
+
+            playButton.addEventListener('click', togglePlay);
+            prevButton.addEventListener('click', prevSong);
+            nextButton.addEventListener('click', nextSong);
+            shuffleButton.addEventListener('click', toggleShuffle);
+            volumeSlider.addEventListener('input', () => player.setVolume(volumeSlider.value));
+
+            const musicToggle = document.getElementById('musicToggle');
+            musicToggle.addEventListener('click', togglePlay);
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.ENDED) {
+                nextSong();
+            }
+        }
+
+        function loadSong() {
+            player.loadVideoById({ videoId: new URL(shuffledPlaylist[currentSongIndex]).searchParams.get('v') });
+            if (isPlaying) player.playVideo();
+        }
+
+        function togglePlay() {
+            if (!player) return;
+            const playButton = document.getElementById('playButton');
+            if (isPlaying) {
+                player.pauseVideo();
+                playButton.textContent = '▶';
+                document.getElementById('musicToggle').textContent = '🎵';
+            } else {
+                player.playVideo();
+                playButton.textContent = '⏸';
+                document.getElementById('musicToggle').textContent = '🎶';
+            }
+            isPlaying = !isPlaying;
+        }
+
+        function prevSong() {
+            currentSongIndex = (currentSongIndex - 1 + shuffledPlaylist.length) % shuffledPlaylist.length;
+            loadSong();
+            if (!isPlaying) togglePlay();
+        }
+
+        function nextSong() {
+            currentSongIndex = (currentSongIndex + 1) % shuffledPlaylist.length;
+            loadSong();
+            if (!isPlaying) togglePlay();
+        }
+
+        function toggleShuffle() {
+            const shuffleButton = document.getElementById('shuffleButton');
+            isShuffled = !isShuffled;
+            if (isShuffled) {
+                shuffledPlaylist = [...playlist].sort(() => Math.random() - 0.5);
+                shuffleButton.style.background = '#f06292';
+            } else {
+                shuffledPlaylist = [...playlist];
+                shuffleButton.style.background = '#e91e63';
+            }
+            currentSongIndex = 0;
+            loadSong();
         }
 
         // Sayaç
