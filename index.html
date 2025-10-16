@@ -103,11 +103,11 @@
         .message-input { width:100%; padding:8px; border-radius:8px; border:1px solid #e91e63; font-family:'Roboto', sans-serif; font-size:0.9em; margin-bottom:10px; }
         body.dark-mode .message-input { border-color:#bb86fc; background:#3f3f74; color:#f0e6ff; }
         .saved-message { font-style:italic; color:#e91e63; font-size:0.9em; margin-top:10px; }
-        body.dark-mode .saved-message { color:#bb86fc; }
+        body.dark-mode .saved-message { color: #bb86fc; }
         .loading { display: none; color: #e91e63; font-size: 0.8em; margin-top: 5px; }
         body.dark-mode .loading { color: #bb86fc; }
         
-        /* YENİ SPOTIFY TARZI ÇALAR STİLLERİ */
+        /* SPOTIFY TARZI ÇALAR STİLLERİ */
         #spotify-player {
             display: flex;
             flex-direction: column; 
@@ -332,6 +332,13 @@
         <p class="subtitle">Sonsuzluğa akacak bir sayaç...</p>
         <p class="greeting" id="greeting">Seni her an daha çok seviyorummm</p>
         
+        <div id="counter">
+            <div class="box"><span id="days" class="number">0</span><span class="label">Gün</span></div>
+            <div class="box"><span id="hours" class="number">0</span><span class="label">Saat</span></div>
+            <div class="box"><span id="minutes" class="number">0</span><span class="label">Dakika</span></div>
+            <div class="box"><span id="seconds" class="number">0</span><span class="label">Saniye</span></div>
+        </div>
+        
         <div id="spotify-player">
             <div class="song-info-container">
                 <div id="album-art" class="album-art-placeholder">❤️</div>
@@ -359,12 +366,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div id="counter">
-            <div class="box"><span id="days" class="number">0</span><span class="label">Gün</span></div>
-            <div class="box"><span id="hours" class="number">0</span><span class="label">Saat</span></div>
-            <div class="box"><span id="minutes" class="number">0</span><span class="label">Dakika</span></div>
-            <div class="box"><span id="seconds" class="number">0</span><span class="label">Saniye</span></div>
         </div>
         <div class="button-container">
             <a href="reasons.html" class="button">Seni Sevmemin Nedenleri</a>
