@@ -5,5 +5,8 @@
   },
   "engines": {
     "node": "18"
+  },
+  "scripts": {          
+    "build": "echo 'No build command needed for static HTML'" 
   }
 }
