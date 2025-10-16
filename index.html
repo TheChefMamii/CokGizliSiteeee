@@ -91,42 +91,11 @@
             cursor: pointer;
         }
         .button:hover { background:#f06292; transform:translateY(-3px); box-shadow:0 6px 20px rgba(233,30,99,0.5); }
-        .music-toggle { cursor:pointer; position:absolute; top:15px; right:15px; font-size:1.1em; color:#fff; background:#e91e63; padding:6px 10px; border-radius:50%; box-shadow:0 4px 10px rgba(0,0,0,0.3); transition:transform 0.3s ease; }
-        body.dark-mode .music-toggle { background: #bb86fc; }
-        .music-toggle:hover { transform:scale(1.1); }
-        .theme-toggle { cursor:pointer; position:absolute; top:15px; right:60px; font-size:1.1em; color:#fff; background:#e91e63; padding:6px 10px; border-radius:50%; box-shadow:0 4px 10px rgba(0,0,0,0.3); transition:transform 0.3s ease; }
+        
+        .theme-toggle { cursor:pointer; position:absolute; top:15px; right:15px; font-size:1.1em; color:#fff; background:#e91e63; padding:6px 10px; border-radius:50%; box-shadow:0 4px 10px rgba(0,0,0,0.3); transition:transform 0.3s ease; z-index: 10; }
         body.dark-mode .theme-toggle { background: #bb86fc; }
         .theme-toggle:hover { transform:scale(1.1); }
-        .volume-control { position:absolute; top:60px; right:15px; display:flex; align-items:center; gap:5px; }
-        .volume-control input[type="range"] {
-            width:80px; cursor:pointer; accent-color:#e91e63;
-        }
-        body.dark-mode .volume-control input[type="range"] { accent-color:#bb86fc; }
-        .music-player {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        body.dark-mode .music-player { background: rgba(30, 30, 50, 0.85); color: #f0e6ff; }
-        .music-player button {
-            background: #e91e63;
-            border: none;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        body.dark-mode .music-player button { background: #bb86fc; }
-        .music-player button:hover { background: #f06292; }
-        body.dark-mode .music-player button:hover { background: #9f6ed3; }
+        
         canvas { position:absolute; top:0; left:0; z-index:0; }
         .youtube-player { position:absolute; top:0; left:0; width:0; height:0; }
         .message-section { margin-top:15px; display:none; }
@@ -137,6 +106,180 @@
         body.dark-mode .saved-message { color:#bb86fc; }
         .loading { display: none; color: #e91e63; font-size: 0.8em; margin-top: 5px; }
         body.dark-mode .loading { color: #bb86fc; }
+        
+        /* YENİ SPOTIFY TARZI ÇALAR STİLLERİ */
+        #spotify-player {
+            display: flex;
+            flex-direction: column; 
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+            width: 90%; 
+            max-width: 450px;
+            transition: background 0.5s, box-shadow 0.5s;
+            border: 1px solid rgba(233, 30, 99, 0.2);
+        }
+
+        .dark-mode #spotify-player {
+            background: rgba(30, 30, 50, 0.7);
+            border: 1px solid rgba(187, 134, 252, 0.2);
+        }
+
+        .song-info-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .album-art-placeholder {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            background: #e91e63;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            /* Heart icon */
+            content: "❤️"; 
+        }
+        .dark-mode .album-art-placeholder { background: #bb86fc; }
+
+        .song-details {
+            flex-grow: 1;
+            text-align: left;
+            min-width: 0;
+        }
+
+        .title {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .artist {
+            font-size: 0.9em;
+            color: #e91e63;
+            font-weight: 400;
+        }
+        .dark-mode .title { color: #f0e6ff; }
+        .dark-mode .artist { color: #bb86fc; }
+
+        .controls-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #track-progress {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.7em;
+            color: #555;
+            width: 100%;
+        }
+        .dark-mode #track-progress { color: #ccc; }
+
+        .progress-bar {
+            flex-grow: 1;
+            height: 4px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dark-mode .progress-bar { background: rgba(255, 255, 255, 0.1); }
+
+        .progress-indicator {
+            height: 100%;
+            width: 0%;
+            background: #e91e63;
+            border-radius: 2px;
+            transition: width 0.1s linear;
+        }
+
+        .dark-mode .progress-indicator { background: #bb86fc; }
+
+        .buttons-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+        }
+
+        #spotify-player button {
+            background: none;
+            border: none;
+            color: #555;
+            font-size: 1.2em;
+            padding: 5px;
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .dark-mode #spotify-player button { color: #ccc; }
+
+        #spotify-player button:hover {
+            color: #e91e63;
+            transform: scale(1.1);
+        }
+
+        .dark-mode #spotify-player button:hover {
+            color: #bb86fc;
+        }
+
+        .main-play {
+            font-size: 1.8em !important;
+            color: #e91e63 !important;
+        }
+
+        .dark-mode .main-play { color: #bb86fc !important; }
+
+        #shuffleButton.active {
+            color: #f06292;
+            transform: scale(1.1);
+        }
+
+        .dark-mode #shuffleButton.active { color: #9f6ed3; }
+
+
+        .volume-control-integrated {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .volume-control-integrated .volume-icon {
+            font-size: 0.9em;
+            color: #555;
+        }
+        .dark-mode .volume-control-integrated .volume-icon { color: #ccc; }
+
+        .volume-control-integrated input[type="range"] {
+            width: 70px;
+            cursor: pointer;
+            accent-color: #e91e63;
+        }
+
+        .dark-mode .volume-control-integrated input[type="range"] {
+            accent-color: #bb86fc;
+        }
+
+        /* Responsive */
         @media (max-width: 600px) {
             .main-card { padding:15px; width:95%; max-width:400px; }
             h1 { font-size:1.8em; }
@@ -146,12 +289,31 @@
             .box .number { font-size:1.6em; }
             .box .label { font-size:0.65em; }
             .button { font-size:0.8em; padding:7px 14px; }
-            .music-toggle { font-size:1em; padding:5px 8px; top:10px; right:10px; }
-            .theme-toggle { top:10px; right:50px; font-size:1em; padding:5px 8px; }
-            .volume-control { top:50px; right:10px; }
-            .volume-control input[type="range"] { width:60px; }
-            .music-player { top: 10px; left: 10px; padding: 8px; }
-            .music-player button { padding: 4px 8px; font-size: 0.8em; }
+            
+            #spotify-player {
+                width: 100%; 
+                padding: 10px;
+            }
+
+            .buttons-row {
+                gap: 5px; 
+            }
+
+            #spotify-player button {
+                font-size: 1.1em;
+            }
+            
+            .main-play {
+                font-size: 1.6em !important;
+            }
+            
+            /* Mobilde ses çubuğunu gizle, yer kazansın */
+            .volume-control-integrated {
+                display: none; 
+            }
+
+            .theme-toggle { top:10px; right:10px; font-size:1em; padding:5px 8px; }
+
         }
         @media (max-width: 400px) {
             .main-card { padding:12px; }
@@ -168,7 +330,36 @@
     <div class="main-card">
         <h1>Sen ve Ben</h1>
         <p class="subtitle">Sonsuzluğa akacak bir sayaç...</p>
-        <p class="greeting" id="greeting">Seni her an daha çok seviyorum...</p>
+        <p class="greeting" id="greeting">Seni her an daha çok seviyorummm</p>
+        
+        <div id="spotify-player">
+            <div class="song-info-container">
+                <div id="album-art" class="album-art-placeholder">❤️</div>
+                <div class="song-details">
+                    <p id="song-title" class="title">Şarkı Yükleniyor...</p>
+                    <p class="artist">Dolu Kadehi Ters Tut</p>
+                </div>
+            </div>
+            <div class="controls-container">
+                <div id="track-progress" class="progress-bar-container">
+                    <span id="current-time">0:00</span>
+                    <div class="progress-bar">
+                        <div id="progress-indicator" class="progress-indicator"></div>
+                    </div>
+                    <span id="duration">0:00</span>
+                </div>
+                <div class="buttons-row">
+                    <button id="shuffleButton" title="Karıştır">🔀</button>
+                    <button id="prevButton" title="Önceki">⏮</button>
+                    <button id="playButton" title="Oynat" class="main-play">▶</button>
+                    <button id="nextButton" title="Sonraki">⏭</button>
+                    <div class="volume-control-integrated">
+                        <span class="volume-icon">🔊</span>
+                        <input type="range" id="volumeSlider" min="0" max="100" value="30" title="Ses Seviyesi">
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="counter">
             <div class="box"><span id="days" class="number">0</span><span class="label">Gün</span></div>
             <div class="box"><span id="hours" class="number">0</span><span class="label">Saat</span></div>
@@ -188,20 +379,10 @@
             <p id="errorMessage" style="color: red; font-size: 0.8em; display: none;"></p>
         </div>
     </div>
-    <div class="music-toggle" id="musicToggle">🎵</div>
     <div class="theme-toggle" id="themeToggle">☀</div>
-    <div class="volume-control">
-        <label for="volumeSlider" style="color:#fff; font-size:0.9em;">Ses:</label>
-        <input type="range" id="volumeSlider" min="0" max="50" value="10">
-    </div>
-    <div class="music-player" id="musicPlayer">
-        <button id="prevButton">⏮</button>
-        <button id="playButton">▶</button>
-        <button id="nextButton">⏭</button>
-        <button id="shuffleButton">🔀</button>
-    </div>
+    
     <div class="youtube-player">
-        <iframe id="ytPlayer" width="0" height="0" src="https://www.youtube.com/embed?listType=playlist&list=PLo2qK9eW2i5z9J8aN3V0X1X1X1X1X1X1&enablejsapi=1&autoplay=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <iframe id="ytPlayer" width="0" height="0" src="https://www.youtube.com/embed?enablejsapi=1&autoplay=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
     </div>
 
     <script src="https://www.youtube.com/iframe_api"></script>
@@ -211,22 +392,39 @@
         let player;
         let isPlaying = false;
         let currentSongIndex = 0;
+        // EN ROMANTİK DOLU KADEHİ TERS TUT ŞARKILARI
         const playlist = [
-            "https://www.youtube.com/watch?v=5dX2X7X2X2X", // Aldatıldık (örnek ID)
-            "https://www.youtube.com/watch?v=6dY3Y3Y3Y3Y", // Dünya (örnek ID)
-            "https://www.youtube.com/watch?v=7eZ4Z4Z4Z4Z"  // Kovalar (örnek ID)
-            // Gerçek ID’leri YouTube’dan al, buraya ekle
+            { id: "FXN0gIVaxlY", title: "Yan Yana" }, 
+            { id: "H0z_FL1XkYc", title: "Islansın" }, 
+            { id: "Vl4vH8sP0v8", title: "Yapma Nolursun" }, 
+            { id: "Y7Z2N2x-7h0", title: "Fırtınam" } 
         ];
         let isShuffled = false;
         let shuffledPlaylist = [...playlist];
+        let updateTimer;
+
+        const playButton = document.getElementById('playButton');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const shuffleButton = document.getElementById('shuffleButton');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const songTitle = document.getElementById('song-title');
+        const currentTimeSpan = document.getElementById('current-time');
+        const durationSpan = document.getElementById('duration');
+        const progressIndicator = document.getElementById('progress-indicator');
+        const progressBarContainer = document.querySelector('.progress-bar');
+        const albumArt = document.getElementById('album-art');
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('ytPlayer', {
                 height: '0',
                 width: '0',
+                videoId: shuffledPlaylist[currentSongIndex].id,
                 playerVars: {
-                    'listType': 'playlist',
-                    'list': playlist.map(url => new URL(url).searchParams.get('v')).join(',')
+                    'controls': 0, 
+                    'disablekb': 1,
+                    'iv_load_policy': 3,
+                    'modestbranding': 1
                 },
                 events: {
                     'onReady': onPlayerReady,
@@ -236,46 +434,57 @@
         }
 
         function onPlayerReady(event) {
-            player.setVolume(10);
-            loadSong();
-            const playButton = document.getElementById('playButton');
-            const prevButton = document.getElementById('prevButton');
-            const nextButton = document.getElementById('nextButton');
-            const shuffleButton = document.getElementById('shuffleButton');
-            const volumeSlider = document.getElementById('volumeSlider');
+            player.setVolume(30);
+            loadSongInfo(shuffledPlaylist[currentSongIndex]);
 
             playButton.addEventListener('click', togglePlay);
             prevButton.addEventListener('click', prevSong);
             nextButton.addEventListener('click', nextSong);
             shuffleButton.addEventListener('click', toggleShuffle);
             volumeSlider.addEventListener('input', () => player.setVolume(volumeSlider.value));
-
-            const musicToggle = document.getElementById('musicToggle');
-            musicToggle.addEventListener('click', togglePlay);
+            
+            progressBarContainer.addEventListener('click', seek);
         }
 
         function onPlayerStateChange(event) {
-            if (event.data === YT.PlayerState.ENDED) {
-                nextSong();
+            if (event.data === YT.PlayerState.PLAYING) {
+                startTimer();
+                isPlaying = true;
+                playButton.textContent = '⏸';
+            } else {
+                stopTimer();
+                if (event.data === YT.PlayerState.ENDED) {
+                    nextSong();
+                } else if (event.data === YT.PlayerState.PAUSED) {
+                    isPlaying = false;
+                    playButton.textContent = '▶';
+                }
             }
         }
 
+        function loadSongInfo(song) {
+            songTitle.textContent = song.title;
+            // Album art icon kalır
+        }
+
         function loadSong() {
-            player.loadVideoById({ videoId: new URL(shuffledPlaylist[currentSongIndex]).searchParams.get('v') });
-            if (isPlaying) player.playVideo();
+            const song = shuffledPlaylist[currentSongIndex];
+            player.loadVideoById(song.id);
+            loadSongInfo(song);
+            
+            setTimeout(() => {
+                const duration = player.getDuration();
+                durationSpan.textContent = formatTime(duration);
+                if (isPlaying) player.playVideo();
+            }, 500); 
         }
 
         function togglePlay() {
             if (!player) return;
-            const playButton = document.getElementById('playButton');
             if (isPlaying) {
                 player.pauseVideo();
-                playButton.textContent = '▶';
-                document.getElementById('musicToggle').textContent = '🎵';
             } else {
                 player.playVideo();
-                playButton.textContent = '⏸';
-                document.getElementById('musicToggle').textContent = '🎶';
             }
             isPlaying = !isPlaying;
         }
@@ -283,30 +492,74 @@
         function prevSong() {
             currentSongIndex = (currentSongIndex - 1 + shuffledPlaylist.length) % shuffledPlaylist.length;
             loadSong();
-            if (!isPlaying) togglePlay();
         }
 
         function nextSong() {
             currentSongIndex = (currentSongIndex + 1) % shuffledPlaylist.length;
             loadSong();
-            if (!isPlaying) togglePlay();
         }
 
         function toggleShuffle() {
-            const shuffleButton = document.getElementById('shuffleButton');
             isShuffled = !isShuffled;
             if (isShuffled) {
-                shuffledPlaylist = [...playlist].sort(() => Math.random() - 0.5);
-                shuffleButton.style.background = '#f06292';
+                const currentSong = shuffledPlaylist[currentSongIndex];
+                const nonShuffled = playlist.filter(s => s.id !== currentSong.id);
+                const shuffledRest = nonShuffled.sort(() => Math.random() - 0.5);
+                shuffledPlaylist = [currentSong, ...shuffledRest];
+                currentSongIndex = 0;
+                shuffleButton.classList.add('active');
             } else {
                 shuffledPlaylist = [...playlist];
-                shuffleButton.style.background = '#e91e63';
+                currentSongIndex = shuffledPlaylist.findIndex(s => s.id === player.getVideoData().video_id);
+                if (currentSongIndex === -1) currentSongIndex = 0; 
+                shuffleButton.classList.remove('active');
             }
-            currentSongIndex = 0;
-            loadSong();
+            loadSong(); 
         }
 
-        // Sayaç
+        function formatTime(seconds) {
+            const min = Math.floor(seconds / 60);
+            const sec = Math.floor(seconds % 60);
+            return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+        }
+
+        function updateProgress() {
+            if (!player || !isPlaying) return;
+            const currentTime = player.getCurrentTime();
+            const duration = player.getDuration();
+            
+            currentTimeSpan.textContent = formatTime(currentTime);
+            // Duration ilk yüklemede sıfır gelirse diye kontrol
+            if (duration && duration > 0) {
+                 durationSpan.textContent = formatTime(duration);
+            }
+            
+            const progressPercent = (currentTime / duration) * 100;
+            progressIndicator.style.width = `${progressPercent}%`;
+        }
+
+        function startTimer() {
+            if (updateTimer) clearInterval(updateTimer);
+            updateTimer = setInterval(updateProgress, 100);
+        }
+
+        function stopTimer() {
+            clearInterval(updateTimer);
+        }
+
+        function seek(e) {
+            if (!player) return;
+            const rect = progressBarContainer.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const width = rect.width;
+            const duration = player.getDuration();
+            
+            const seekTime = (clickX / width) * duration;
+            player.seekTo(seekTime, true);
+        }
+
+
+        // Sayaç fonksiyonu
         const baslangicTarihi = new Date(2025, 4, 30, 6, 16, 0); // 30 Mayıs 2025, 06:16
         const counterSpans = {
             days: document.getElementById('days'),
@@ -356,6 +609,7 @@
         }
         window.addEventListener('resize', () => {
             confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
             confettiCanvas.height = window.innerHeight;
         });
 
@@ -460,7 +714,7 @@
             localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
         });
 
-        // Mesaj Bırak & Telegram Gönderimi
+        // Mesaj Bırak & Telegram Gönderimi (BACKEND GEREKİR)
         const messageButton = document.getElementById('messageButton');
         const messageSection = document.getElementById('messageSection');
         const messageInput = document.getElementById('messageInput');
@@ -483,6 +737,8 @@
                 loading.style.display = 'block';
                 errorMessage.style.display = 'none';
                 try {
+                    // Bu kısım Netlify Function veya kendi sunucun varsa çalışır
+                    // Local'de veya basit statik host'ta çalışmaz, hata verir.
                     const response = await fetch('/.netlify/functions/telegram', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -497,7 +753,10 @@
                     localStorage.setItem('savedMessage', message);
                     alert('Mesaj sevgiline gönderildi! ❤️');
                 } catch (error) {
-                    errorMessage.textContent = 'Hata: ' + error.message;
+                    // Backend yoksa burası çalışır, yine de mesajı kaydeder
+                    savedMessage.textContent = message;
+                    localStorage.setItem('savedMessage', message);
+                    errorMessage.textContent = 'UYARI: Mesaj kaydedildi, ancak Telegram API bağlantısı olmadığı için gönderilemedi. Hata: ' + error.message;
                     errorMessage.style.display = 'block';
                     alert('Mesaj kaydedildi, ama gönderimde hata: ' + error.message);
                 }
