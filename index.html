@@ -66,20 +66,20 @@
             animation: fadeIn 1s ease-out;
             transition: transform 0.1s ease, background 0.5s ease, color 0.5s ease;
         }
-        @keyframes fadeIn { 0% { opacity:0; transform:scale(0.95);} 100% {opacity:1; transform:scale(1);} }
-        h1 { font-family:'Playfair Display', serif; font-size:2.2em; color:#e91e63; margin-bottom:12px; text-shadow:2px 2px 10px rgba(0,0,0,0.1);}
+        @keyframes fadeIn { 0% { opacity:0; transform:scale(0.95); } 100% { opacity:1; transform:scale(1); } }
+        h1 { font-family:'Playfair Display', serif; font-size:2.2em; color:#e91e63; margin-bottom:12px; text-shadow:2px 2px 10px rgba(0,0,0,0.1); }
         body.dark-mode h1 { color: #bb86fc; }
-        .subtitle { font-size:0.9em; color:#555; margin-bottom:8px; font-weight:300;}
-        .greeting { font-size:1em; color:#e91e63; margin-bottom:15px; font-style:italic; opacity:0; animation: fadeInText 2s ease forwards;}
-        @keyframes fadeInText { 0% { opacity:0; transform:translateY(10px);} 100% { opacity:1; transform:translateY(0);} }
-        #counter { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin:15px 0;}
-        .box { background: rgba(233,30,99,0.1); padding:12px; border-radius:8px; min-width:70px; color:#e91e63; transition: transform 0.3s ease;}
-        .box:hover { transform: scale(1.05);}
-        .box .number { font-size:2em; font-weight:700;}
-        .box .label { font-size:0.7em; text-transform:uppercase; font-weight:400;}
-        .number.flip { animation: flipDown 0.5s ease-out;}
-        @keyframes flipDown {0% { transform: translateY(-100%); opacity:0;} 100% { transform:translateY(0); opacity:1;}}
-        .button-container { display:flex; justify-content:center; gap:10px; margin-top:20px; flex-wrap:wrap;}
+        .subtitle { font-size:0.9em; color:#555; margin-bottom:8px; font-weight:300; }
+        .greeting { font-size:1em; color:#e91e63; margin-bottom:15px; font-style:italic; opacity:0; animation: fadeInText 2s ease forwards; }
+        @keyframes fadeInText { 0% { opacity:0; transform:translateY(10px); } 100% { opacity:1; transform:translateY(0); } }
+        #counter { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin:15px 0; }
+        .box { background: rgba(233,30,99,0.1); padding:12px; border-radius:8px; min-width:70px; color:#e91e63; transition: transform 0.3s ease; }
+        .box:hover { transform: scale(1.05); }
+        .box .number { font-size:2em; font-weight:700; }
+        .box .label { font-size:0.7em; text-transform:uppercase; font-weight:400; }
+        .number.flip { animation: flipDown 0.5s ease-out; }
+        @keyframes flipDown { 0% { transform: translateY(-100%); opacity:0; } 100% { transform:translateY(0); opacity:1; } }
+        .button-container { display:flex; justify-content:center; gap:10px; margin-top:20px; flex-wrap:wrap; }
         .button {
             text-decoration:none; color:white;
             background:#e91e63;
@@ -90,25 +90,25 @@
             border: none;
             cursor: pointer;
         }
-        .button:hover { background:#f06292; transform:translateY(-3px); box-shadow:0 6px 20px rgba(233,30,99,0.5);}
-        .music-toggle { cursor:pointer; position:absolute; top:15px; right:15px; font-size:1.1em; color:#fff; background:#e91e63; padding:6px 10px; border-radius:50%; box-shadow:0 4px 10px rgba(0,0,0,0.3); transition:transform 0.3s ease;}
+        .button:hover { background:#f06292; transform:translateY(-3px); box-shadow:0 6px 20px rgba(233,30,99,0.5); }
+        .music-toggle { cursor:pointer; position:absolute; top:15px; right:15px; font-size:1.1em; color:#fff; background:#e91e63; padding:6px 10px; border-radius:50%; box-shadow:0 4px 10px rgba(0,0,0,0.3); transition:transform 0.3s ease; }
         body.dark-mode .music-toggle { background: #bb86fc; }
         .music-toggle:hover { transform:scale(1.1); }
-        .theme-toggle { cursor:pointer; position:absolute; top:15px; right:60px; font-size:1.1em; color:#fff; background:#e91e63; padding:6px 10px; border-radius:50%; box-shadow:0 4px 10px rgba(0,0,0,0.3); transition:transform 0.3s ease;}
+        .theme-toggle { cursor:pointer; position:absolute; top:15px; right:60px; font-size:1.1em; color:#fff; background:#e91e63; padding:6px 10px; border-radius:50%; box-shadow:0 4px 10px rgba(0,0,0,0.3); transition:transform 0.3s ease; }
         body.dark-mode .theme-toggle { background: #bb86fc; }
         .theme-toggle:hover { transform:scale(1.1); }
-        .volume-control { position:absolute; top:60px; right:15px; display:flex; align-items:center; gap:5px;}
+        .volume-control { position:absolute; top:60px; right:15px; display:flex; align-items:center; gap:5px; }
         .volume-control input[type="range"] {
             width:80px; cursor:pointer; accent-color:#e91e63;
         }
         body.dark-mode .volume-control input[type="range"] { accent-color:#bb86fc; }
         canvas { position:absolute; top:0; left:0; z-index:0; }
         .youtube-player { position:absolute; top:0; left:0; width:0; height:0; }
-        .message-section { margin-top:15px; display:none;}
+        .message-section { margin-top:15px; display:none; }
         .message-section.active { display:block; }
-        .message-input { width:100%; padding:8px; border-radius:8px; border:1px solid #e91e63; font-family:'Roboto', sans-serif; font-size:0.9em; margin-bottom:10px;}
-        body.dark-mode .message-input { border-color:#bb86fc; background:#3f3f74; color:#f0e6ff;}
-        .saved-message { font-style:italic; color:#e91e63; font-size:0.9em; margin-top:10px;}
+        .message-input { width:100%; padding:8px; border-radius:8px; border:1px solid #e91e63; font-family:'Roboto', sans-serif; font-size:0.9em; margin-bottom:10px; }
+        body.dark-mode .message-input { border-color:#bb86fc; background:#3f3f74; color:#f0e6ff; }
+        .saved-message { font-style:italic; color:#e91e63; font-size:0.9em; margin-top:10px; }
         body.dark-mode .saved-message { color:#bb86fc; }
         .loading { display: none; color: #e91e63; font-size: 0.8em; margin-top: 5px; }
         body.dark-mode .loading { color: #bb86fc; }
@@ -174,13 +174,6 @@
     <script src="https://www.youtube.com/iframe_api"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
-        // Şifre kontrolü
-        const password = prompt("Siteye girmek için şifreyi gir:");
-        if (password !== "senveben2025") {
-            alert("Yanlış şifre, sevgilim! 😄");
-            window.location.href = "about:blank";
-        }
-
         // YouTube IFrame API
         let player;
         let isPlaying = false;
