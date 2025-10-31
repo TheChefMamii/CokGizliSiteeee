@@ -260,49 +260,6 @@
             line-height: 1.6;
         }
 
-        .typing-indicator {
-            display: none;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 16px;
-            background: white;
-            border-radius: 20px;
-            width: fit-content;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            margin-bottom: 16px;
-        }
-
-        .typing-indicator.active {
-            display: flex;
-        }
-
-        .typing-dot {
-            width: 8px;
-            height: 8px;
-            background: #c06c84;
-            border-radius: 50%;
-            animation: typing 1.4s infinite;
-        }
-
-        .typing-dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes typing {
-            0%, 60%, 100% {
-                transform: translateY(0);
-                opacity: 0.5;
-            }
-            30% {
-                transform: translateY(-10px);
-                opacity: 1;
-            }
-        }
-
         @media (max-width: 600px) {
             .chat-container {
                 max-width: 100%;
@@ -342,30 +299,26 @@
     </div>
 
     <script>
-        const TELEGRAM_URL = '/.netlify/functions/telegram';
-        const GET_MESSAGES_URL = '/.netlify/functions/get-messages';
-        const ADD_MESSAGE_URL = '/.netlify/functions/add-message';
-        
         let messages = [];
         let lastMessageCount = 0;
 
         // Sayfa yüklendiğinde mesajları yükle
         async function init() {
             await loadMessages();
-            setInterval(loadMessages, 2000); // 2 saniyede bir kontrol et
+            setInterval(loadMessages, 3000);
         }
 
         async function loadMessages() {
             try {
-                const response = await fetch(GET_MESSAGES_URL);
-                const data = await response.json();
-                
-                if (data.success && data.messages) {
-                    messages = data.messages;
+                // Claude Storage API kullan
+                const result = await window.storage.get('mami-messages', true);
+                if (result && result.value) {
+                    messages = JSON.parse(result.value);
                     displayMessages();
                 }
             } catch (error) {
-                console.error('Mesajlar yüklenemedi:', error);
+                // İlk açılışta mesaj yoksa hata verir, normal
+                console.log('Mesajlar yükleniyor...');
             }
         }
 
@@ -440,53 +393,29 @@
             const text = input.value.trim();
             const sendBtn = document.getElementById('sendBtn');
 
-            if (text) {
-                sendBtn.disabled = true;
+            if (!text) return;
 
-                const newMessage = {
-                    from: 'you',
-                    text: text,
-                    timestamp: new Date().toISOString()
-                };
+            sendBtn.disabled = true;
 
-                messages.push(newMessage);
+            const newMessage = {
+                from: 'you',
+                text: text,
+                timestamp: new Date().toISOString()
+            };
 
-                try {
-                    await window.storage.set('mami-messages', JSON.stringify(messages), true);
-                    
-                    // Telegram'a bildirim gönder
-                    await sendTelegramNotification(text);
-                    
-                    input.value = '';
-                    displayMessages();
-                } catch (error) {
-                    console.error('Mesaj gönderilemedi:', error);
-                    alert('Mesaj gönderilemedi, lütfen tekrar dene! 😔');
-                    messages.pop();
-                } finally {
-                    sendBtn.disabled = false;
-                    input.focus();
-                }
-            }
-        }
+            messages.push(newMessage);
 
-        async function sendTelegramNotification(messageText) {
             try {
-                const response = await fetch(NETLIFY_FUNCTION_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        message: messageText
-                    })
-                });
-
-                if (!response.ok) {
-                    console.error('Telegram bildirimi gönderilemedi');
-                }
+                await window.storage.set('mami-messages', JSON.stringify(messages), true);
+                input.value = '';
+                displayMessages();
             } catch (error) {
-                console.error('Telegram hatası:', error);
+                console.error('Mesaj gönderilemedi:', error);
+                alert('Mesaj gönderilemedi! 😔');
+                messages.pop();
+            } finally {
+                sendBtn.disabled = false;
+                input.focus();
             }
         }
 
