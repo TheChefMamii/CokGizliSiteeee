@@ -8,5 +8,19 @@
   },
   "scripts": {          
     "build": "echo 'No build command needed for static HTML'" 
+  },
+
+  "name": "netlify-functions",
+  "version": "1.0.0",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  
+  "dependencies": {
+    "axios": "^1.6.0",
+    "@supabase/supabase-js": "^2.39.0"
   }
+
 }
+
