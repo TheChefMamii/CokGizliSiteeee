@@ -342,9 +342,9 @@
     </div>
 
     <script>
-        const TELEGRAM_URL = '/.netlify/functions/telegram';
-        const GET_MESSAGES_URL = '/.netlify/functions/get-messages';
-        const ADD_MESSAGE_URL = '/.netlify/functions/add-message';
+        const TELEGRAM_URL = '/api/telegram';
+        const GET_MESSAGES_URL = '/api/get-messages';
+        const ADD_MESSAGE_URL = '/api/add-message';
         
         let messages = [];
         let lastMessageCount = 0;
@@ -386,7 +386,7 @@
             let lastDate = '';
 
             messages.forEach((msg) => {
-                const msgDate = new Date(msg.created_at).toLocaleDateString('tr-TR', { 
+                const msgDate = new Date(msg.timestamp).toLocaleDateString('tr-TR', { 
                     day: 'numeric', 
                     month: 'long',
                     year: 'numeric'
@@ -408,19 +408,19 @@
                     lastDate = msgDate;
                 }
 
-                const time = new Date(msg.created_at).toLocaleTimeString('tr-TR', { 
+                const time = new Date(msg.timestamp).toLocaleTimeString('tr-TR', { 
                     hour: '2-digit', 
                     minute: '2-digit' 
                 });
 
-                const msgClass = msg.from_user === 'mami' ? 'mami' : 'you';
-                const msgName = msg.from_user === 'mami' ? 'Mami' : 'Sen';
+                const msgClass = msg.from === 'mami' ? 'mami' : 'you';
+                const msgName = msg.from === 'mami' ? 'Mami' : 'Sen';
 
                 html += `
                     <div class="message ${msgClass}">
                         <div class="message-header">${msgName}</div>
                         <div class="message-bubble">
-                            <div class="message-text">${escapeHtml(msg.message)}</div>
+                            <div class="message-text">${escapeHtml(msg.text)}</div>
                             <div class="message-time">${time}</div>
                         </div>
                     </div>
@@ -443,34 +443,50 @@
             if (text) {
                 sendBtn.disabled = true;
 
+                const newMessage = {
+                    from: 'you',
+                    text: text,
+                    timestamp: new Date().toISOString()
+                };
+
+                messages.push(newMessage);
+
                 try {
-                    // Telegram'a bildirim gönder
-                    await fetch(TELEGRAM_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: text })
-                    });
+                    await window.storage.set('mami-messages', JSON.stringify(messages), true);
                     
-                    // Mesajı veritabanına ekle (API_SECRET_KEY olmadan, çünkü bu kullanıcıdan geliyor)
-                    await fetch(ADD_MESSAGE_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ 
-                            message: text,
-                            from: 'you',
-                            apiKey: 'user-message' // Özel key, kullanıcı mesajları için
-                        })
-                    });
+                    // Telegram'a bildirim gönder
+                    await sendTelegramNotification(text);
                     
                     input.value = '';
-                    await loadMessages(); // Mesajları yeniden yükle
+                    displayMessages();
                 } catch (error) {
                     console.error('Mesaj gönderilemedi:', error);
                     alert('Mesaj gönderilemedi, lütfen tekrar dene! 😔');
+                    messages.pop();
                 } finally {
                     sendBtn.disabled = false;
                     input.focus();
                 }
+            }
+        }
+
+        async function sendTelegramNotification(messageText) {
+            try {
+                const response = await fetch(NETLIFY_FUNCTION_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: messageText
+                    })
+                });
+
+                if (!response.ok) {
+                    console.error('Telegram bildirimi gönderilemedi');
+                }
+            } catch (error) {
+                console.error('Telegram hatası:', error);
             }
         }
 
