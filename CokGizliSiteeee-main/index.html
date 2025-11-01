@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sen ve Ben</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--bg-start:#f8bbd0;--bg-end:#e91e63;--card-bg:rgba(255,255,255,.15);--text-color:#fff;--accent-color:rgba(255,255,255,.25);--shadow:rgba(0,0,0,.3)}
+        body.theme-pink{--bg-start:#f8bbd0;--bg-end:#e91e63}
+        body.theme-sunset{--bg-start:#f8bbd0;--bg-end:#fa709a}
+        body.theme-ocean{--bg-start:#bbdefb;--bg-end:#90caf9}
+        body.theme-forest{--bg-start:#c8e6c9;--bg-end:#81c784}
+        body.theme-galaxy{--bg-start:#2c003e;--bg-end:#4b0082;--card-bg:rgba(255,255,255,.15)}
+        body{font-family:'Poppins',sans-serif;background:linear-gradient(-45deg,var(--bg-start),var(--bg-end),var(--bg-start),var(--bg-end));background-size:400% 400%;animation:gradientShift 15s ease infinite;min-height:100vh;display:flex;justify-content:center;align-items:center;color:var(--text-color);overflow-x:hidden;position:relative}
+        @keyframes gradientShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+        .bg-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(255,255,255,0.15)"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') repeat;background-size:40px;opacity:.15;pointer-events:none;z-index:1}
+        body.theme-galaxy .bg-overlay{opacity:.25}
+        .heart-rain{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:2;overflow:hidden}
+        .heart{position:absolute;font-size:20px;animation:fall linear infinite;opacity:.6}
+        @keyframes fall{0%{transform:translateY(-100px) rotate(0deg);opacity:.6}100%{transform:translateY(100vh) rotate(360deg);opacity:0}}
+        .sparkle{position:fixed;pointer-events:none;animation:sparkleAnim 1.5s ease-out forwards;z-index:9999}
+        @keyframes sparkleAnim{0%{transform:scale(0) rotate(0deg);opacity:1}100%{transform:scale(1) rotate(180deg);opacity:0}}
+        .container{background:var(--card-bg);backdrop-filter:blur(15px);border-radius:30px;padding:40px;max-width:700px;width:90%;box-shadow:0 15px 50px var(--shadow);text-align:center;position:relative;z-index:10;animation:slideIn .8s ease-out}
+        @keyframes slideIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+        .settings-btn{position:fixed;top:20px;right:20px;background:var(--card-bg);backdrop-filter:blur(10px);border:none;width:50px;height:50px;border-radius:50%;font-size:24px;cursor:pointer;color:#fff;box-shadow:0 5px 20px var(--shadow);transition:transform .3s,background .3s;z-index:1000}
+        .settings-btn:hover{transform:rotate(90deg) scale(1.1)}
+        .settings-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);backdrop-filter:blur(5px);z-index:9999;display:none;justify-content:center;align-items:center}
+        .settings-modal.active{display:flex}
+        .settings-content{background:var(--card-bg);backdrop-filter:blur(20px);border-radius:20px;padding:30px;max-width:500px;width:90%;max-height:80vh;overflow-y:auto;position:relative}
+        .close-btn{position:absolute;top:15px;right:15px;background:none;border:none;font-size:28px;color:#fff;cursor:pointer;width:35px;height:35px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .3s}
+        .close-btn:hover{background:rgba(255,255,255,.2)}
+        .settings-section{margin:25px 0;text-align:left}
+        .settings-section h3{margin-bottom:15px;font-size:1.2em;font-weight:600}
+        .theme-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:15px;margin-top:10px}
+        .theme-option{aspect-ratio:1;border-radius:15px;cursor:pointer;border:3px solid transparent;transition:all .3s;position:relative;overflow:hidden}
+        .theme-option:hover{transform:scale(1.05)}
+        .theme-option.active{border-color:#fff;box-shadow:0 0 20px rgba(255,255,255,.5)}
+        .theme-option.purple{background:linear-gradient(-45deg,#f8bbd0,#e91e63,#bbdefb,#90caf9)}
+        .theme-option.pink{background:linear-gradient(-45deg,#f8bbd0,#e91e63)}
+        .theme-option.sunset{background:linear-gradient(-45deg,#f8bbd0,#fa709a)}
+        .theme-option.ocean{background:linear-gradient(-45deg,#bbdefb,#90caf9)}
+        .theme-option.forest{background:linear-gradient(-45deg,#c8e6c9,#81c784)}
+        .theme-option.galaxy{background:linear-gradient(-45deg,#2c003e,#4b0082)}
+        .theme-label{position:absolute;bottom:5px;left:0;right:0;text-align:center;font-size:.7em;background:rgba(0,0,0,.5);padding:3px}
+        .volume-control{display:flex;align-items:center;gap:15px;margin-top:10px}
+        .volume-control input[type=range]{flex:1;height:6px;background:rgba(255,255,255,.3);border-radius:5px;outline:none;-webkit-appearance:none}
+        .volume-control input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:#fff;border-radius:50%;cursor:pointer}
+        .music-toggle{background:var(--accent-color);border:none;padding:10px 20px;border-radius:25px;color:#fff;cursor:pointer;font-size:.9em;transition:all .3s}
+        .music-toggle:hover{background:rgba(255,255,255,.5)}
+        .song-select{margin-top:12px;width:100%;padding:8px 12px;border-radius:12px;background:rgba(255,255,255,.2);color:#fff;border:none;outline:none;cursor:pointer;font-family:'Poppins',sans-serif}
+        .song-select option{background:#444;color:#fff}
+        h1{font-family:'Playfair Display',serif;font-size:3em;margin-bottom:10px;text-shadow:2px 2px 8px var(--shadow);animation:glow 3s ease-in-out infinite}
+        @keyframes glow{0%,100%{text-shadow:2px 2px 8px var(--shadow)}50%{text-shadow:0 0 20px rgba(255,255,255,.8),2px 2px 8px var(--shadow)}}
+        .subtitle{font-size:1.2em;margin-bottom:30px;opacity:.9;font-weight:300}
+        .counter{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:15px;margin:30px 0}
+        .counter-box{background:var(--accent-color);backdrop-filter:blur(10px);padding:20px;border-radius:20px;transition:all .3s;position:relative;overflow:hidden}
+        .counter-box::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,rgba(255,255,255,.1),transparent);transform:rotate(45deg);animation:shine 3s infinite}
+        @keyframes shine{0%{transform:translateX(-100%) translateY(-100%) rotate(45deg)}100%{transform:translateX(100%) translateY(100%) rotate(45deg)}}
+        .counter-box:hover{transform:translateY(-5px) scale(1.05);box-shadow:0 10px 30px var(--shadow)}
+        .counter-number{font-size:2.5em;font-weight:bold;display:block;position:relative;z-index:1}
+        .counter-label{font-size:.9em;opacity:.8;margin-top:5px;position:relative;z-index:1}
+        .message{margin-top:30px;font-size:1.3em;font-style:italic;opacity:0;animation:fadeIn 2s ease forwards;font-family:'Playfair Display',serif}
+        @keyframes fadeIn{to{opacity:1}}
+        .buttons{margin-top:30px;display:flex;gap:15px;justify-content:center;flex-wrap:wrap}
+        .btn{background:var(--accent-color);backdrop-filter:blur(10px);border:2px solid rgba(255,255,255,.3);padding:14px 28px;border-radius:30px;color:#fff;font-size:1em;font-weight:500;cursor:pointer;transition:all .4s cubic-bezier(.175,.885,.32,1.275);text-decoration:none;display:inline-block;position:relative;overflow:hidden}
+        .btn::before{content:'';position:absolute;top:50%;left:50%;width:0;height:0;border-radius:50%;background:rgba(255,255,255,.3);transform:translate(-50%,-50%);transition:width .6s,height .6s}
+        .btn:hover::before{width:300px;height:300px}
+        .btn:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 10px 30px var(--shadow);border-color:rgba(255,255,255,.8)}
+        .btn span{position:relative;z-index:1}
+        .telegram-section{margin-top:40px;padding-top:30px;border-top:2px solid rgba(255,255,255,.2)}
+        .telegram-section h2{font-family:'Playfair Display',serif;font-size:1.8em;margin-bottom:15px}
+        .telegram-section p{opacity:.9;margin-bottom:20px}
+        .telegram-section textarea{width:100%;min-height:120px;padding:15px;border-radius:20px;border:2px solid rgba(255,255,255,.3);background:var(--accent-color);backdrop-filter:blur(10px);color:#fff;font-size:1em;font-family:'Poppins',sans-serif;resize:vertical;outline:none;transition:all .3s}
+        .telegram-section textarea::placeholder{color:rgba(255,255,255,.6)}
+        .telegram-section textarea:focus{border-color:rgba(255,255,255,.8);box-shadow:0 0 20px rgba(255,255,255,.3)}
+        #telegramStatus{margin-top:15px;font-size:.9em;opacity:0;transition:opacity .3s}
+        @media(max-width:768px){.container{padding:25px;width:95%}h1{font-size:2em}.subtitle{font-size:1em}.counter{grid-template-columns:repeat(2,1fr);gap:10px}.counter-box{padding:15px}.counter-number{font-size:2em}.message{font-size:1.1em}.btn{padding:12px 20px;font-size:.9em}.settings-btn{width:45px;height:45px;font-size:20px}.theme-grid{grid-template-columns:repeat(3,1fr)}.telegram-section h2{font-size:1.5em}}
+        @media(max-width:480px){h1{font-size:1.8em}.counter-number{font-size:1.8em}.buttons{flex-direction:column}.btn{width:100%}}
+    </style>
+</head>
+<body>
+
+    <!-- Arka Plan Kalp Deseni -->
+    <div class="bg-overlay"></div>
+
+    <!-- Kalp Yağmuru -->
+    <div class="heart-rain" id="heartRain"></div>
+
+    <!-- Ayarlar Butonu -->
+    <button class="settings-btn" onclick="toggleSettings()">⚙️</button>
+
+    <!-- Ayarlar Modal -->
+    <div class="settings-modal" id="settingsModal">
+        <div class="settings-content">
+            <button class="close-btn" onclick="toggleSettings()">×</button>
+            <h2 style="margin-bottom:20px;">Ayarlar</h2>
+
+            <!-- Tema Seçimi -->
+            <div class="settings-section">
+                <h3>Tema Seç</h3>
+                <div class="theme-grid">
+                    <div class="theme-option purple active" onclick="changeTheme('purple')"><div class="theme-label">Gardient</div></div>
+                    <div class="theme-option pink" onclick="changeTheme('pink')"><div class="theme-label">Pembee</div></div>
+                    <div class="theme-option sunset" onclick="changeTheme('sunset')"><div class="theme-label">Daha açık pembee</div></div>
+                    <div class="theme-option ocean" onclick="changeTheme('ocean')"><div class="theme-label">açık mavi</div></div>
+                    <div class="theme-option forest" onclick="changeTheme('forest')"><div class="theme-label">yesill</div></div>
+                    <div class="theme-option galaxy" onclick="changeTheme('galaxy')"><div class="theme-label">mor</div></div>
+                </div>
+            </div>
+
+            <!-- Müzik Kontrolleri -->
+            <div class="settings-section">
+                <h3>Müzik</h3>
+                <button class="music-toggle" id="musicToggle" onclick="toggleMusic()">Müziği Başlat</button>
+                <div class="volume-control">
+                    <span>Low Volume</span>
+                    <input type="range" id="volumeSlider" min="0" max="100" value="30" onchange="changeVolume()">
+                    <span>High Volume</span>
+                </div>
+
+                <!-- ŞARKI SEÇİMİ -->
+                <select class="song-select" id="songSelect" onchange="changeSong(this.value)">
+                    <option value="0">Dilerim ki (Insturmental)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ana İçerik -->
+    <div class="container">
+        <h1>Sen ve Ben</h1>
+        <p class="subtitle">Sonsuzluğa akan bir sayaç...</p>
+
+        <div class="counter">
+            <div class="counter-box"><span class="counter-number" id="days">0</span><span class="counter-label">Gün</span></div>
+            <div class="counter-box"><span class="counter-number" id="hours">0</span><span class="counter-label">Saat</span></div>
+            <div class="counter-box"><span class="counter-number" id="minutes">0</span><span class="counter-label">Dakika</span></div>
+            <div class="counter-box"><span class="counter-number" id="seconds">0</span><span class="counter-label">Saniye</span></div>
+        </div>
+
+
+        <div class="buttons">
+            <button class="btn" onclick="window.location.href='reasons.html'"><span>Seni Sevme Nedenlerim</span></button>
+            <button class="btn" onclick="window.location.href='cok-guzelsin.html'"><span>Çok Güzelsin!</span></button>
+            <button class="btn" onclick="window.location.href='mesaj.html'"><span>Mesaj Bırak</span></button>
+        </div>
+
+        <!-- Telegram Mesaj Gönderme -->
+        <div class="telegram-section">
+            <h2>Bana Mesaj gönderme</h2>
+            <p>Ne yazmak istersinn...</p>
+            <textarea id="telegramMessage" placeholder="Mesajını buraya yaz... 💗"></textarea>
+            <button class="btn" onclick="sendToTelegram()" style="margin-top:15px;width:100%"><span id="sendBtnText">Gönder</span></button>
+            <p id="telegramStatus"></p>
+        </div>
+    </div>
+
+    <!-- ARKA PLAN MÜZİK PLAYER (gizli) -->
+    <audio id="bgAudio" loop style="display:none;">
+        <source src="assets/dilerimkibackground.mp3" type="audio/mpeg">
+        Tarayıcınız ses çalamıyor.
+    </audio>
+
+    <script>
+        /* ==================== MÜZİK ==================== */
+        const audio = document.getElementById('bgAudio');
+        const toggleBtn = document.getElementById('musicToggle');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const songSelect = document.getElementById('songSelect');
+
+        const songs = [
+            "assets/dilerimkibackground.mp3"
+        ];
+
+        let isPlaying = false;
+        let currentSong = 0;
+
+        function changeVolume() {
+            audio.volume = volumeSlider.value / 100;
+        }
+
+        function changeSong(idx) {
+            currentSong = parseInt(idx);
+            audio.src = songs[currentSong];
+            if (isPlaying) audio.play();
+        }
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                toggleBtn.textContent = 'Müziği Başlat';
+                isPlaying = false;
+            } else {
+                audio.play().catch(() => {
+                    alert('Müzik çalmak için bir kere tıklaman gerekiyor ❤️');
+                });
+                toggleBtn.textContent = 'Müziği Duraklat';
+                isPlaying = true;
+            }
+        }
+
+        window.addEventListener('load', () => {
+            audio.src = songs[0];
+            audio.volume = 0.3;
+        });
+
+        /* ==================== KALP YAĞMURU ==================== */
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';  // KALP EMOJİSİ
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            document.getElementById('heartRain').appendChild(heart);
+            setTimeout(() => heart.remove(), 6000);
+        }
+        setInterval(createHeart, 500);
+
+        /* ==================== TIKLAYINCA YILDIZ PATLAMASI ==================== */
+        document.addEventListener('click', (e) => {
+            for (let i = 0; i < 7; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.innerHTML = '⭐️';  // YILDIZ EMOJİSİ
+                sparkle.style.left = (e.clientX + (Math.random() - 0.5) * 50) + 'px';
+                sparkle.style.top = (e.clientY + (Math.random() - 0.5) * 50) + 'px';
+                sparkle.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                sparkle.style.animationDelay = (i * 0.05) + 's';
+                document.body.appendChild(sparkle);
+                setTimeout(() => sparkle.remove(), 1500);
+            }
+        });
+
+        /* ==================== DİĞER FONKSİYONLAR ==================== */
+        function toggleSettings() {
+            document.getElementById('settingsModal').classList.toggle('active');
+        }
+
+        function changeTheme(t) {
+            const map = { 'purple': '', 'pink': 'theme-pink', 'sunset': 'theme-sunset', 'ocean': 'theme-ocean', 'forest': 'theme-forest', 'galaxy': 'theme-galaxy' };
+            document.body.className = map[t] || '';
+            document.querySelectorAll('.theme-option').forEach(o => o.classList.remove('active'));
+            document.querySelector('.theme-option.' + t).classList.add('active');
+            try { localStorage.setItem('theme', t); } catch (e) {}
+        }
+        try { changeTheme(localStorage.getItem('theme') || 'purple'); } catch (e) { changeTheme('purple'); }
+
+        const startDate = new Date(2025, 4, 30, 6, 16, 0);
+        function updateCounter() {
+            const diff = Date.now() - startDate;
+            if (diff < 0) return;
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            document.getElementById('days').textContent = d;
+            document.getElementById('hours').textContent = h;
+            document.getElementById('minutes').textContent = m;
+            document.getElementById('seconds').textContent = s;
+        }
+        updateCounter(); setInterval(updateCounter, 1000);
+
+        const msgs = ["Seni çok seviyorum Heart","Her an daha çok seviyorum Heart","Yanımda olduğun için teşekkürler Star","Sen benim her şeyimsin Heart","Seninle her şey daha güzel Sparkle","Gözlerin çok güzel Eye","Gülüşün muhteşem Smile","Sen harikasın Rose"];
+        let mi = 0;
+        setInterval(() => {
+            document.getElementById('message').style.opacity = 0;
+            setTimeout(() => {
+                mi = (mi + 1) % msgs.length;
+                document.getElementById('message').textContent = msgs[mi];
+                document.getElementById('message').style.opacity = 1;
+            }, 500);
+        }, 5000);
+
+        async function sendToTelegram() {
+            const txt = document.getElementById('telegramMessage').value.trim();
+            const status = document.getElementById('telegramStatus');
+            const btn = document.getElementById('sendBtnText');
+            if (!txt) { status.textContent = 'Lütfen bir mesaj yaz!'; status.style.opacity = 1; status.style.color = '#ffeb3b'; setTimeout(() => { status.style.opacity = 0; }, 3000); return; }
+            btn.textContent = 'Gönderiliyor...'; btn.parentElement.disabled = true;
+            try {
+                const r = await fetch('/.netlify/functions/telegram', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: txt }) });
+                const d = await r.json();
+                if (r.ok && d.success) {
+                    status.textContent = 'Mesajın ulaştı! ❤️'; status.style.color = '#4caf50';
+                    document.getElementById('telegramMessage').value = '';
+                    for (let i = 0; i < 20; i++) setTimeout(() => {
+                        const s = document.createElement('div'); s.className = 'sparkle'; s.innerHTML = 'Sparkle'; s.style.left = Math.random() * innerWidth + 'px'; s.style.top = Math.random() * innerHeight + 'px'; s.style.fontSize = (Math.random() * 25 + 15) + 'px'; document.body.appendChild(s); setTimeout(() => s.remove(), 1500);
+                    }, i * 50);
+                } else throw new Error(d.error || 'Hata');
+            } catch (e) {
+                status.textContent = 'Gönderim başarısız.'; status.style.color = '#f44336';
+            }
+            btn.textContent = 'Gönder'; btn.parentElement.disabled = false;
+            status.style.opacity = 1; setTimeout(() => { status.style.opacity = 0; }, 5000);
+        }
+        document.getElementById('telegramMessage').addEventListener('keydown', e => { if (e.key === 'Enter' && e.ctrlKey) sendToTelegram(); });
+
+        window.addEventListener('load', () => {
+            try {
+                if (!localStorage.getItem('visited')) {
+                    setTimeout(() => {
+                        alert('Hoş geldin Güzelimmmm. ❤️');
+                        localStorage.setItem('visited', 'true');
+                    }, 1000);
+                }
+            } catch (e) {}
+        });
+    </script>
+</body>
+</html>

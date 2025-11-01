@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>herseyinleçokseviyorum</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500&family=Roboto&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #2c3e50;
+            color: white;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        #love-overlay {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1; pointer-events: none;
+        }
+        .love-text {
+            position: absolute; color: rgba(229, 142, 142, 0.7);
+            font-size: 1.5em; opacity: 0;
+            animation: floatFade 10s infinite ease-in-out;
+        }
+        @keyframes floatFade {
+            0%, 100% { opacity: 0; transform: translateY(20px); }
+            50% { opacity: 1; transform: translateY(-20px); }
+        }
+
+        .container { text-align: center; position: relative; z-index: 10; }
+        
+        /* EKLENEN CSS KURALI */
+        .pre-title {
+            font-size: 1.8em;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: fadeInPreTitle 1s ease 1s forwards;
+        }
+        @keyframes fadeInPreTitle {
+            to { opacity: 1; }
+        }
+
+        #initial-word { font-size: 4em; font-weight: bold; opacity: 0; transition: opacity 1s; }
+        #reasons-list { font-size: 2em; height: 50px; transition: color 1s; }
+        #final-box {
+            background-color: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px); padding: 40px; border-radius: 15px;
+            font-family: 'Playfair Display', serif; font-size: 2em; font-style: italic;
+            opacity: 0; transform: scale(0.8);
+            transition: opacity 0.5s, transform 0.5s;
+            display: inline-block;
+        }
+        .visible { opacity: 1 !important; }
+        .final-visible { opacity: 1 !important; transform: scale(1) !important; }
+
+        #back-button {
+            position: fixed; bottom: 25px; left: 25px;
+            width: 45px; height: 45px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 1.5em; text-decoration: none;
+            backdrop-filter: blur(10px);
+            transition: transform 0.2s, background-color 0.2s;
+            z-index: 20;
+        }
+        #back-button:hover {
+            transform: scale(1.1);
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" id="back-button" title="Ana Menüye Dön">↰</a>
+    <div id="love-overlay"></div>
+    <div class="container">
+        <p class="pre-title">Seni Seviyorum</p>
+        <h1 id="initial-word">Çünkü...</h1>
+        <div id="reasons-list"></div>
+        <div id="final-box">Beni ben olduğum için sevmeni seviyorum.</div>
+    </div>
+
+    <script>
+        const reasons = ["Beni mutlu etmen", "Yaptığım ufak şeyleri bile çok sevmen", "Beni hayata döndürmen", "Beni herşey de desteklemen", "Bana değer vermen", "Beni önemsemen", "Benle gün boyu konuşman", "Benle şarkı dinlemenn", "Ben hastayken benle ilgilenmen", "Beni her halimle kabul etmen", "Çok güzelsinnnnnnnn.", "Efektler olmadan bile çok güzelsinn.", "Harika biri olman", "Hatta mükemmel biri olman", "Arada inatlaşman :D", "Elimi tutman", "Saçımı okşaman", "Karnıma yumruk atman :D", "Kötü bir gün geçirdiğimde anlaman.", "Ufacık suratım asık olduğunda fark etmen", "Birlikte hayal kurabilmemiz.", "Her zaman dürüst olman.", "GÖZLERİNNNNN", "Ses tonun", "GÖZLERİNİN RENGİİİİİ", "GÖZLERİNE GÜNEŞ VURARKENN", "Saçların", "Birlikte reels izlememiz", "Kokunnn(çokguzellll)", "Beni her zaman dinlemen", "Affedici olman", "Sadakatin", "Sabırlı olman", "Enerjin", "Detayları fark etmen", "Anlayışlı olmann", "Beni daha iyi bir insan yapman", "GÜlÜŞÜNNNNN", "Kendince kusur gördüğün her şeyinn(hiçbiri kusur değil)", "Verdiğin sözleri tutman", "Bana kendimi özel hissettirmen", "Kurduğumuz hayallerin", "içtenliğin", "Komik anıların.", "Gelecek planlarımızz", "Kirpiklerinn(evtonlardaçokguzell)", "Yaratıcılığın", "Makyajlı Makyajsız her türlü güzel olan yüzünnn", "Doğallığın", "Bana kattığın her şey", "Seninle sessizliğin bile anlamlı olması", "Neşenn", "Mutluluğunn", "Yanımda olman", "Beni herzaman desteklemen", "Paylaşımcı olman", "birlikte güldüğümüz anlar", "Kibar olmann", "Beni motive etmen", "seninle her yolculuğun güzel olması.", "olduğun gibi davranman.", "Yardımseverliğin", "Bana olan sevgin", "Seninle ilgili herşeyyyyy", "Bazen çocuk gibi olmannn", "Sorumluluk sahibi olmann", "Bana yakisikli demen(ohabencedogrudegil)", "İçindeki iyilikk", "Seninle ilgili öğrendiğim her yeni şeyy", "İçimde yaşama isteği oluşturmann", "Düşünceli olman", "Bana bakışın(içindekayboluyom)", "Her türlü beni ikna etmen(yarıyarıyabazıdurumlarda)", "Beni sakinleştirmen", "Senle herşeyin mümkün görünmesi", "Umudun", "Her zaman kendin olman", "Senin varlığınn", "Sadece sen olman.", "Ve sayamadığım daha binlerce şey(onlarıdaeklicem)", "Çünkü sen benim her şeyimsin.", "seni çok seviyorum ve sevmeye devam ediceğimm"];
+        const initialWord = document.getElementById('initial-word');
+        const reasonsList = document.getElementById('reasons-list');
+        const finalBox = document.getElementById('final-box');
+        const loveOverlay = document.getElementById('love-overlay');
+        let reasonIndex = 0;
+        let speed = 500;
+
+        window.onload = function() {
+            finalBox.style.display = 'none';
+            animateTitle();
+            setTimeout(() => {
+                initialWord.classList.add('visible');
+                showNextReason();
+            }, 1000);
+        };
+        
+        // DEĞİŞTİRİLEN FONKSİYON
+        function animateTitle() {
+            const titles = [
+                "❤️",
+                "Her şeyinle seviyorum..."
+            ];
+            let titleIndex = 0;
+            setInterval(() => {
+                document.title = titles[titleIndex];
+                titleIndex = (titleIndex + 1) % titles.length;
+            }, 1500);
+        }
+
+        function showNextReason() {
+            if (reasonIndex < reasons.length) {
+                reasonsList.innerText = reasons[reasonIndex];
+                reasonIndex++;
+                if (speed > 50) { speed -= 40; }
+                setTimeout(showNextReason, speed);
+            } else {
+                finishAnimation();
+            }
+        }
+
+        function finishAnimation() {
+            initialWord.style.opacity = '0';
+            document.querySelector('.pre-title').style.opacity = '0';
+            reasonsList.style.color = 'rgba(255, 255, 255, 0.4)'; 
+            setTimeout(() => {
+                finalBox.style.display = 'inline-block';
+                setTimeout(() => finalBox.classList.add('final-visible'), 100);
+                startBackgroundLoop();
+                createLoveTexts(20);
+            }, 1000);
+        }
+        
+        function startBackgroundLoop() {
+            let loopIndex = 0;
+            setInterval(() => {
+                reasonsList.innerText = reasons[loopIndex];
+                loopIndex = (loopIndex + 1) % reasons.length;
+            }, 1200);
+        }
+
+        function createLoveTexts(count) {
+            for (let i = 0; i < count; i++) {
+                const loveText = document.createElement('span');
+                loveText.className = 'love-text';
+                loveText.innerText = 'Seni Çok Seviyorum';
+                loveText.style.top = `${Math.random() * 100}%`;
+                loveText.style.left = `${Math.random() * 100}%`;
+                loveText.style.fontSize = `${Math.random() * 1 + 1}em`;
+                loveText.style.animationDelay = `${Math.random() * 10}s`;
+                loveOverlay.appendChild(loveText);
+            }
+        }
+    </script>
+
+</body>
+</html>
