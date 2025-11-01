@@ -260,49 +260,6 @@
             line-height: 1.6;
         }
 
-        .typing-indicator {
-            display: none;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 16px;
-            background: white;
-            border-radius: 20px;
-            width: fit-content;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            margin-bottom: 16px;
-        }
-
-        .typing-indicator.active {
-            display: flex;
-        }
-
-        .typing-dot {
-            width: 8px;
-            height: 8px;
-            background: #c06c84;
-            border-radius: 50%;
-            animation: typing 1.4s infinite;
-        }
-
-        .typing-dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes typing {
-            0%, 60%, 100% {
-                transform: translateY(0);
-                opacity: 0.5;
-            }
-            30% {
-                transform: translateY(-10px);
-                opacity: 1;
-            }
-        }
-
         @media (max-width: 600px) {
             .chat-container {
                 max-width: 100%;
@@ -342,6 +299,7 @@
     </div>
 
     <script>
+        // VERCEL için API endpoints
         const TELEGRAM_URL = '/api/telegram';
         const GET_MESSAGES_URL = '/api/get-messages';
         const ADD_MESSAGE_URL = '/api/add-message';
@@ -386,7 +344,7 @@
             let lastDate = '';
 
             messages.forEach((msg) => {
-                const msgDate = new Date(msg.timestamp).toLocaleDateString('tr-TR', { 
+                const msgDate = new Date(msg.created_at).toLocaleDateString('tr-TR', { 
                     day: 'numeric', 
                     month: 'long',
                     year: 'numeric'
@@ -408,19 +366,19 @@
                     lastDate = msgDate;
                 }
 
-                const time = new Date(msg.timestamp).toLocaleTimeString('tr-TR', { 
+                const time = new Date(msg.created_at).toLocaleTimeString('tr-TR', { 
                     hour: '2-digit', 
                     minute: '2-digit' 
                 });
 
-                const msgClass = msg.from === 'mami' ? 'mami' : 'you';
-                const msgName = msg.from === 'mami' ? 'Mami' : 'Sen';
+                const msgClass = msg.from_user === 'mami' ? 'mami' : 'you';
+                const msgName = msg.from_user === 'mami' ? 'Mami' : 'Sen';
 
                 html += `
                     <div class="message ${msgClass}">
                         <div class="message-header">${msgName}</div>
                         <div class="message-bubble">
-                            <div class="message-text">${escapeHtml(msg.text)}</div>
+                            <div class="message-text">${escapeHtml(msg.message)}</div>
                             <div class="message-time">${time}</div>
                         </div>
                     </div>
@@ -443,50 +401,34 @@
             if (text) {
                 sendBtn.disabled = true;
 
-                const newMessage = {
-                    from: 'you',
-                    text: text,
-                    timestamp: new Date().toISOString()
-                };
-
-                messages.push(newMessage);
-
                 try {
-                    await window.storage.set('mami-messages', JSON.stringify(messages), true);
-                    
                     // Telegram'a bildirim gönder
-                    await sendTelegramNotification(text);
+                    await fetch(TELEGRAM_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: text })
+                    });
+                    
+                    // Mesajı Supabase'e ekle
+                    await fetch(ADD_MESSAGE_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            message: text,
+                            from: 'you',
+                            apiKey: 'user-message'
+                        })
+                    });
                     
                     input.value = '';
-                    displayMessages();
+                    await loadMessages(); // Mesajları yeniden yükle
                 } catch (error) {
                     console.error('Mesaj gönderilemedi:', error);
                     alert('Mesaj gönderilemedi, lütfen tekrar dene! 😔');
-                    messages.pop();
                 } finally {
                     sendBtn.disabled = false;
                     input.focus();
                 }
-            }
-        }
-
-        async function sendTelegramNotification(messageText) {
-            try {
-                const response = await fetch(NETLIFY_FUNCTION_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        message: messageText
-                    })
-                });
-
-                if (!response.ok) {
-                    console.error('Telegram bildirimi gönderilemedi');
-                }
-            } catch (error) {
-                console.error('Telegram hatası:', error);
             }
         }
 
